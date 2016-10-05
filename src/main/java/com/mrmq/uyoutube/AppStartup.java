@@ -2,10 +2,12 @@ package com.mrmq.uyoutube;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 @Controller
 @EnableAutoConfiguration
@@ -19,6 +21,13 @@ public class AppStartup {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(AppStartup.class, args);
+        logger.info("start with args: " + Arrays.toString(args));
+        YouTubeService service = new YouTubeService(args[0]);
+
+        try {
+            service.loadConfig();
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 }

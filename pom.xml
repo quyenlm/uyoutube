@@ -8,6 +8,12 @@
     <artifactId>uyoutube</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.1.RELEASE</version>
+    </parent>
+
     <properties>
         <project.youtube.version>v3-rev178-1.22.0</project.youtube.version>
         <project.youtube.analytics.version>v1-rev24-1.17.0-rc</project.youtube.analytics.version>
@@ -34,11 +40,11 @@
             <version>${org.slf4j.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${org.slf4j.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>slf4j-log4j12</artifactId>-->
+            <!--<version>${org.slf4j.version}</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>log4j</groupId>
@@ -89,6 +95,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring-context.verion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>1.4.1.RELEASE</version>
         </dependency>
     </dependencies>
 

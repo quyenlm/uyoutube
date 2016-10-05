@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 
 public class VideoDirectory extends File {
-    private static final Logger logger = LoggerFactory.getLogger(VideoDirectory.class;
+    private static final Logger logger = LoggerFactory.getLogger(VideoDirectory.class);
 
     private String dirPath;
 
@@ -26,8 +26,9 @@ public class VideoDirectory extends File {
             return false;
         }
 
-        for (File file: dir.listFiles()) {
+        for (File file: this.listFiles()) {
         }
+        return true;
     }
 
 }

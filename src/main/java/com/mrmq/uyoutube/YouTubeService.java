@@ -4,6 +4,7 @@ package com.mrmq.uyoutube;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Channel;
+import com.google.api.services.youtube.model.ChannelSnippet;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.common.base.Strings;
@@ -44,7 +45,7 @@ public class YouTubeService {
                 init(configFile);
 
             //read data from csv
-            //line 1: channel_email, channel_id, channel_name, tags
+            //line 1: channel_email, channel_id, channel_name, channel_desc
             //line 2: source_id, video_id, video_title, video_desc, video_tags
 
             String line;
@@ -53,22 +54,27 @@ public class YouTubeService {
             int count = 0;
             while ((line = reader.readLine()) != null) {
                 count++;
-                arrTmp = line.split(",", -1);
+                arrTmp = line.split(FileHelper.CSV_SPLIT, -1);
 
                 if(count == 2) {
                     channel = new Channel();
                     channel.setId(arrTmp[1]); //Id
-                } else if (count > 2) {
+
+                    ChannelSnippet channelSnip = new ChannelSnippet();
+                    channelSnip.setTitle(arrTmp[2]);
+                    channelSnip.setDescription(arrTmp[3]);
+                    channel.setSnippet(channelSnip);
+                } else if (count > 3) {
                     Video video = new Video();
                     video.setId(arrTmp[1]); //source_id
 
                     VideoSnippet snippet = new VideoSnippet();
-
+                    snippet.setChannelId(channel.getId());
                     snippet.setTitle(arrTmp[2]);
                     snippet.setDescription(arrTmp[3]);
 
                     if(!Strings.isNullOrEmpty(arrTmp[4])) {
-                        String[] arrTags = arrTmp[4].split("<>");
+                        String[] arrTags = arrTmp[4].split(FileHelper.TAG_SPLIT);
                         snippet.setTags(Lists.newArrayList(arrTags));
                     }
 
@@ -76,6 +82,7 @@ public class YouTubeService {
                 }
             }
             logger.info("Loaded channel: " + channel);
+            logger.info("Total videos: " + videos.size());
             logger.info("Channel videos: " + videos);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -95,11 +102,11 @@ public class YouTubeService {
             writer = new BufferedWriter(new FileWriter(configFile));
 
             //write data from csv
-            //line 1, 2: email, channel_id, channel_name, tags
-            writer.write("#channel_email, channel_id, channel_name, channel_tags"); writer.newLine();
+            //line 1, 2: channel_email, channel_id, channel_name, channel_desc
+            writer.write("#channel_email<>channel_id<>channel_name<>channel_desc"); writer.newLine();
             writer.write(ownerEmail + FileHelper.CSV_SPLIT + FileHelper.CSV_SPLIT + FileHelper.CSV_SPLIT); writer.newLine();
             //line 3, 4: source_id, video_id, video_title, video_desc, video_tags
-            writer.write("#source_id, video_id, video_title, video_desc, video_tags"); writer.newLine();
+            writer.write("#source_id<>video_id<>video_title<>video_desc<>video_tags"); writer.newLine();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {

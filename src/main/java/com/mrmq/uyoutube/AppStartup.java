@@ -22,7 +22,7 @@ public class AppStartup {
 
     public static void main(String[] args) {
         logger.info("start with args: " + Arrays.toString(args));
-        YouTubeService service = new YouTubeService(args[0]);
+        YouTubeService service = new YouTubeService("p@gmail.com");
 
         try {
             service.loadConfig();

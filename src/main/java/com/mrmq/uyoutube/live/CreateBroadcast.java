@@ -17,7 +17,7 @@ package com.mrmq.uyoutube.live;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.util.DateTime;
-import com.mrmq.uyoutube.Auth;
+import com.mrmq.uyoutube.authenticate.Auth;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.*;
 import com.google.common.collect.Lists;

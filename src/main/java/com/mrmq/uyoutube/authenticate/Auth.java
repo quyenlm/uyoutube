@@ -1,4 +1,4 @@
-package com.mrmq.uyoutube;
+package com.mrmq.uyoutube.authenticate;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.StoredCredential;

@@ -2,6 +2,7 @@ package com.mrmq.uyoutube.windows;
 
 import com.mrmq.uyoutube.AppStartup;
 import com.mrmq.uyoutube.YouTubeService;
+import com.mrmq.uyoutube.beans.ScreenSetting;
 import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.helper.Validator;
 import javafx.event.ActionEvent;
@@ -48,7 +49,8 @@ public class UYouTubeLoginController {
                         stage = (Stage) btnLogin.getScene().getWindow();
                         //load up OTHER FXML document
                         root = FXMLLoader.load(getClass().getResource("../../../../fxml/fxml_main.fxml"));
-                        scene = new Scene(root, 1024, 768);
+                        ScreenSetting setting = Config.getScreenSetting().get(ScreenSetting.SCREEN_MAIN);
+                        scene = new Scene(root, setting.getWidth(), setting.getHeight());
                     } else {
                         txtMessage.setText("Email/Pass not correct");
                     }
@@ -59,6 +61,7 @@ public class UYouTubeLoginController {
             //create a new scene with root and set the stage
             if(stage != null) {
                 stage.setScene(scene);
+                stage.centerOnScreen();
                 stage.show();
             }
         } catch (Exception e) {

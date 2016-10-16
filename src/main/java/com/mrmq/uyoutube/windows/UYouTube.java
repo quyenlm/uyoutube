@@ -1,9 +1,12 @@
 package com.mrmq.uyoutube.windows;
 
+import com.mrmq.uyoutube.beans.ScreenSetting;
+import com.mrmq.uyoutube.config.Config;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,7 +26,8 @@ public class UYouTube extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("../../../../fxml/fxml_login.fxml"));
 
         stage.setTitle("Login");
-        stage.setScene(new Scene(root, 300, 275));
+        ScreenSetting setting = Config.getScreenSetting().get(ScreenSetting.SCREEN_LOGIN);
+        stage.setScene(new Scene(root, setting.getWidth(), setting.getHeight()));
         stage.show();
     }
 

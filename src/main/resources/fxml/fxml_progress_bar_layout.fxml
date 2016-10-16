@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="257.0" prefWidth="434.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mrmq.uyoutube.windows.UYouTubeMainController">
+    <children>
+        <ProgressBar fx:id="progressBar" layoutX="54.0" layoutY="103.0" prefHeight="51.0" prefWidth="326.0" progress="0.0" />
+        <Button layoutX="201.0" layoutY="182.0" mnemonicParsing="false" onAction="#onButtonClick" text="OK" />
+    </children>
+</AnchorPane>

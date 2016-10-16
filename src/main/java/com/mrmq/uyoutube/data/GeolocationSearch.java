@@ -184,7 +184,7 @@ public class GeolocationSearch {
 
         if (inputQuery.length() < 1) {
             // Use the string "37.42307,-122.08427" as a default.
-            inputQuery = "37.42307,-122.08427";
+            inputQuery = "35.42307,-125.08427";
         }
         return inputQuery;
     }

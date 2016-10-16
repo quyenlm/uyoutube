@@ -93,7 +93,8 @@ public class Search {
             // {{ https://cloud.google.com/console }}
             String apiKey = properties.getProperty("youtube.apikey");
             search.setKey(apiKey);
-            search.setQ(queryTerm);
+//            search.setQ(queryTerm);
+            search.setChannelId("UC0jDoh3tVXCaqJ6oTve8ebA");
 
             // Restrict the search results to only include videos. See:
             // https://developers.google.com/youtube/v3/docs/search/list#type

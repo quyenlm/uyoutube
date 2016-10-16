@@ -14,6 +14,9 @@ public class Config {
     public static final String YOUTUBE__WATCH_URL = "https://www.youtube.com/watch?v=";
     public static YouTubeService uouTubeService;
 
+    private static final String appName = "uYouTube";
+    private static String apiKey = "AIzaSyB46r92ADOWDL3CIFdcMaB8auZ3_2iEmK4";
+
     static {
         screenSetting.put(ScreenSetting.SCREEN_MAIN, new ScreenSetting(512, 512));
         screenSetting.put(ScreenSetting.SCREEN_LOGIN, new ScreenSetting(300, 275));
@@ -21,5 +24,13 @@ public class Config {
 
     public static Map<String, ScreenSetting> getScreenSetting() {
         return screenSetting;
+    }
+
+    public static String getAppName() {
+        return appName;
+    }
+
+    public static String getApiKey() {
+        return apiKey;
     }
 }

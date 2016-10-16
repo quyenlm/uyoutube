@@ -69,7 +69,8 @@ public class ChannelBulletin {
             // Construct a request to retrieve the current user's channel ID.
             // See https://developers.google.com/youtube/v3/docs/channels/list
             YouTube.Channels.List channelRequest = youtube.channels().list("contentDetails");
-            channelRequest.setMine(true);
+//            channelRequest.setMine(true);
+            channelRequest.setId("UC0jDoh3tVXCaqJ6oTve8ebA");
 
             // In the API response, only include channel information needed
             // for this use case.

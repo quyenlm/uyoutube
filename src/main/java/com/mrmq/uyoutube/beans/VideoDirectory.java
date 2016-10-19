@@ -40,8 +40,10 @@ public class VideoDirectory extends File {
         return true;
     }
 
-    public void loadConfig() throws IOException {
+    public Map<String, Video> loadInfo() throws IOException {
         BufferedReader reader = null;
+        videos.clear();
+
         try {
             File configFile = new File(FileHelper.makerChannelFileName(VIDEOS_DIR_INI));
             if(!configFile.exists() || configFile.length() == 0)
@@ -85,6 +87,8 @@ public class VideoDirectory extends File {
             if(reader != null)
                 reader.close();
         }
+
+        return videos;
     }
 
     private void init(File configFile) throws IOException {

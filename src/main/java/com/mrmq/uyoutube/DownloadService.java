@@ -5,6 +5,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.github.axet.vget.VGet;
@@ -18,12 +21,18 @@ import com.github.axet.wget.info.DownloadInfo;
 import com.github.axet.wget.info.DownloadInfo.Part;
 import com.github.axet.wget.info.DownloadInfo.Part.States;
 import com.github.axet.wget.info.ex.DownloadInterruptedError;
+import com.google.api.services.youtube.model.Channel;
+import com.google.api.services.youtube.model.Video;
 import com.mrmq.uyoutube.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AppManagedDownload {
-    private static final Logger logger = LoggerFactory.getLogger(AppManagedDownload.class);
+public class DownloadService extends Thread {
+    private static final Logger logger = LoggerFactory.getLogger(DownloadService.class);
+    private BlockingQueue<Video> downloadQueues = new LinkedBlockingQueue<Video>();
+
+    private boolean isRunning = false;
+    private Channel channel;
 
     static class VGetStatus implements Runnable {
         VideoInfo videoinfo;
@@ -193,5 +202,32 @@ public class AppManagedDownload {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public DownloadService(Channel channel){
+        this.channel = channel;
+    }
+
+    public void add(Video video) {
+        downloadQueues.add(video);
+    }
+
+    @Override
+    public void run() {
+        isRunning = true;
+        while (isRunning) {
+            try {
+                Video video = downloadQueues.poll(1000, TimeUnit.MILLISECONDS);
+                if(video != null)
+                    downloadVideo(Config.YOUTUBE__WATCH_URL + video.getId(), video.getId(), Config.getDownloadPath());
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+    }
+
+    public void stopDownload() {
+        isRunning  = false;
+        this.interrupt();
     }
 }

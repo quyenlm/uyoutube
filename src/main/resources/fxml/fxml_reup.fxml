@@ -18,7 +18,7 @@
     <Text id="welcome-text" text="Re-up" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
 
     <Label id="lbChannelId" text="Channel Id:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    <TextField fx:id="txtChannelId" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+    <TextField fx:id="txtChannelId" text="UCXF4WjTCUQSmGapnNEZzbYw" GridPane.columnIndex="2" GridPane.rowIndex="2" />
 
     <Label id="lbChannelName" text="Channel Name:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
     <Label fx:id="lbChannelNameValue" GridPane.columnIndex="2" GridPane.rowIndex="3" />

@@ -203,15 +203,15 @@ public class YouTubeService {
 
         boolean needResave = channelVideos.size() < videos.size();
         //filter no longer exist video from config file
-//        Iterator<Video> iter = videos.values().iterator();
-//        while(iter.hasNext()) {
-//            Video video = iter.next();
-//            if(!channelVideos.containsKey(video.getId())) {
-////                logger.info("Remove videoId: {}, videoTitle: {}", video.getId(), video.getSnippet().getTitle());
-////                iter.remove();
-////                needResave = true;
-//            }
-//        }
+        Iterator<Video> iter = videos.values().iterator();
+        while(iter.hasNext()) {
+            Video video = iter.next();
+            if(!channelVideos.containsKey(video.getId())) {
+                logger.info("Remove videoId: {}, videoTitle: {}", video.getId(), video.getSnippet().getTitle());
+                iter.remove();
+                needResave = true;
+            }
+        }
 
         videos = channelVideos;
         //Resave config File

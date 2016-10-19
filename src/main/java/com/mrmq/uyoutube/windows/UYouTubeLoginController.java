@@ -1,9 +1,12 @@
 package com.mrmq.uyoutube.windows;
 
+import com.google.api.services.youtube.model.Channel;
 import com.mrmq.uyoutube.AppStartup;
+import com.mrmq.uyoutube.DownloadService;
 import com.mrmq.uyoutube.YouTubeService;
 import com.mrmq.uyoutube.beans.ScreenSetting;
 import com.mrmq.uyoutube.config.Config;
+import com.mrmq.uyoutube.config.Context;
 import com.mrmq.uyoutube.helper.Validator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -51,6 +54,9 @@ public class UYouTubeLoginController {
                         root = FXMLLoader.load(getClass().getResource("../../../../fxml/fxml_main.fxml"));
                         ScreenSetting setting = Config.getScreenSetting().get(ScreenSetting.SCREEN_MAIN);
                         scene = new Scene(root, setting.getWidth(), setting.getHeight());
+
+
+                        Context.setDownloadService(new DownloadService());
                     } else {
                         txtMessage.setText("Email/Pass not correct");
                     }
@@ -73,7 +79,7 @@ public class UYouTubeLoginController {
     private boolean loadChannel(final String email) throws IOException {
         YouTubeService service = new YouTubeService();
         service.setChannelEmail(email);
-        Config.uouTubeService = service;
+        Context.setYouTubeService(service);
         return service.login();
     }
 

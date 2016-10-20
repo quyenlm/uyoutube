@@ -1,9 +1,11 @@
 package com.mrmq.uyoutube.helper;
 
 import com.google.api.services.youtube.model.Video;
+import com.mrmq.uyoutube.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.List;
 
 public class FileHelper {
@@ -13,6 +15,18 @@ public class FileHelper {
 
     public static String makerChannelFileName(String channelEmail) {
         return channelEmail + ".ini";
+    }
+
+    public static String createFilePath(String dirPath, String fileName) {
+        if(dirPath.endsWith(File.separator))
+            return dirPath + fileName;
+        else return dirPath + File.separator + fileName;
+    }
+
+    public static String createVideoFile(String dirPath, String fileName) {
+        if(dirPath.endsWith(File.separator))
+            return dirPath + fileName + Config.getVideoType();
+        else return dirPath + File.separator + fileName + Config.getVideoType();
     }
 
     public static String toCsv(Video video) {

@@ -71,7 +71,7 @@ public class VideoSearch {
             search.setType("video");
 
             // To increase efficiency, only retrieve the fields that the application uses.
-            search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
+            search.setFields("items(id/kind,id/videoId,snippet,snippet/channelId,snippet/title,snippet/description,snippet/thumbnails/default/url)");
             search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
 
             // Call the API and print results.
@@ -108,8 +108,12 @@ public class VideoSearch {
                     VideoSnippet snippet = new VideoSnippet();
                     snippet.setTitle(singleVideo.getSnippet().getTitle());
                     snippet.setDescription(singleVideo.getSnippet().getDescription());
+                    snippet.setChannelId(singleVideo.getSnippet().getChannelId());
+
                     video.setSnippet(snippet);
+
                     lstVideos.add(video);
+
                     logger.info(String.valueOf(video));
                 }
             }

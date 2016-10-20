@@ -34,18 +34,17 @@ public class UYouTubeReupController {
     @FXML private ListView lvDownloaded;
     private Map<String, Video> newVideos = new ConcurrentHashMap<String, Video>();
 
-    @FXML protected void handleSubmitButtonAction(ActionEvent event) {
+    @FXML protected void handleReupButtonAction(ActionEvent event) {
         try {
             if(event.getSource() == btnDownloadVideo) {
-                search();
-            }
 
+            }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
-    private void search() {
+    @FXML protected void handleRefreshButtonAction(ActionEvent event) {
         lvVideos.getItems().clear();
         lvDownloaded.getItems().clear();
         newVideos.clear();
@@ -79,6 +78,7 @@ public class UYouTubeReupController {
                     if(!downloadedVideos.containsKey(video.getId())) {
                         lvVideos.getItems().add(video.getSnippet().getTitle());
                         newVideos.put(video.getId(), video);
+                        channelDir.addVideo(video);
                     } else
                         downloaded++;
                 }
@@ -91,9 +91,13 @@ public class UYouTubeReupController {
             txtMessage.setText(e.getMessage());
             logger.error(e.getMessage(), e);
         }
+
+        if(newVideos.size() > 0)
+            btnDownloadVideo.setDisable(false);
     }
 
-    private void downloadVideos() {
+    @FXML protected void handleDownloadButtonAction(ActionEvent event) {
+        btnDownloadVideo.setDisable(true);
         if(newVideos.size() > 0)
             for (Video video: newVideos.values()) {
                 Context.getDownloadService().add(video);

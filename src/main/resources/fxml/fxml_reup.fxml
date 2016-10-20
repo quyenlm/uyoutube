@@ -20,6 +20,10 @@
     <Label id="lbChannelId" text="Channel Id:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
     <TextField fx:id="txtChannelId" text="UCXF4WjTCUQSmGapnNEZzbYw" GridPane.columnIndex="2" GridPane.rowIndex="2" />
 
+    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="3" GridPane.rowIndex="2">
+        <Button fx:id="btnRefresh" onAction="#handleRefreshButtonAction" text="Refresh" />
+    </HBox>
+
     <Label id="lbChannelName" text="Channel Name:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
     <Label fx:id="lbChannelNameValue" GridPane.columnIndex="2" GridPane.rowIndex="3" />
 
@@ -29,11 +33,11 @@
     <Text fx:id="txtMessage" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
     <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="5">
-        <Button fx:id="btnDownloadVideo" onAction="#handleSubmitButtonAction" text="Download" />
+        <Button fx:id="btnDownloadVideo" text="Download" disable="true" onAction="#handleDownloadButtonAction"/>
     </HBox>
 
     <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="4" GridPane.rowIndex="5">
-        <Button fx:id="btnReupVideo" onAction="#handleSubmitButtonAction" text="Re-up videos" />
+        <Button fx:id="btnReupVideo" text="Re-up videos" disable="true" onAction="#handleReupButtonAction"/>
     </HBox>
 
     <ListView fx:id="lvVideos" GridPane.fillHeight="2" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="2" />

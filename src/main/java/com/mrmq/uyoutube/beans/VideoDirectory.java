@@ -10,7 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URI;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class VideoDirectory extends File {
     private static final Logger logger = LoggerFactory.getLogger(VideoDirectory.class);
@@ -41,11 +44,16 @@ public class VideoDirectory extends File {
     }
 
     public Map<String, Video> loadInfo() throws IOException {
+        logger.info("loadInfo dirPath: {}", dirPath);
         BufferedReader reader = null;
         videos.clear();
 
         try {
-            File configFile = new File(FileHelper.makerChannelFileName(VIDEOS_DIR_INI));
+            File dir = new File(dirPath);
+            if(!dir.exists())
+                dir.mkdirs();
+
+            File configFile = new File(FileHelper.createFilePath(dirPath, VIDEOS_DIR_INI));
             if(!configFile.exists() || configFile.length() == 0)
                 init(configFile);
 
@@ -79,6 +87,7 @@ public class VideoDirectory extends File {
                 }
             }
 
+            filterRemovedVideos();
             logger.info("Total videos: " + videos.size());
             logger.info("Directory videos: " + videos);
         } catch (Exception e) {
@@ -89,6 +98,24 @@ public class VideoDirectory extends File {
         }
 
         return videos;
+    }
+
+    private void filterRemovedVideos() {
+        Map<String, File> currentFiles = new ConcurrentHashMap<String, File>();
+
+        File[] listFile = listFiles();
+        if(listFile == null || listFile.length == 0)
+            return;
+
+        for(File file : listFiles())
+            currentFiles.put(file.getName(), file);
+
+        Iterator<String> itKey = videos.keySet().iterator();
+        while (itKey.hasNext()) {
+            String fileName = itKey.next();
+            if (currentFiles.containsKey(fileName))
+                itKey.remove();
+        }
     }
 
     private void init(File configFile) throws IOException {
@@ -115,7 +142,7 @@ public class VideoDirectory extends File {
         BufferedWriter writer = null;
         boolean result = false;
         try {
-            writer = new BufferedWriter(new FileWriter(VIDEOS_DIR_INI, true));
+            writer = new BufferedWriter(new FileWriter(FileHelper.createFilePath(dirPath, VIDEOS_DIR_INI), true));
             //write data to csv
             //line 1, 2: video_id, channel_id, video_title, video_desc, video_tags
             writer.write(FileHelper.toCsv(video)); writer.newLine();

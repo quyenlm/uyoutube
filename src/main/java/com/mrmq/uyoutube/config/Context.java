@@ -8,7 +8,7 @@ public class Context {
     private static YouTubeService youTubeService;
     private static DownloadService downloadService;
 
-    public YouTubeService getYouTubeService() {
+    public static YouTubeService getYouTubeService() {
         return youTubeService;
     }
 
@@ -21,6 +21,6 @@ public class Context {
     }
 
     public static void setDownloadService(DownloadService downloadService) {
-        downloadService = downloadService;
+        Context.downloadService = downloadService;
     }
 }

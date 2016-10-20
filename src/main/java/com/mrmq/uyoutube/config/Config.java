@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Config {
     public static Map<String, ScreenSetting> screenSetting = new ConcurrentHashMap<String, ScreenSetting>();
+    public static Map<String, String> messages = new ConcurrentHashMap<String, String>();
 
     public static final String YOUTUBE__WATCH_URL = "https://www.youtube.com/watch?v=";
 //    public static YouTubeService uouTubeService;
@@ -38,5 +39,9 @@ public class Config {
 
     public static String getDownloadPath() {
         return downloadPath;
+    }
+
+    public static String getVideoType() {
+        return ".mp4";
     }
 }

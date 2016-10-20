@@ -5,6 +5,7 @@ import com.mrmq.uyoutube.AppStartup;
 import com.mrmq.uyoutube.YouTubeService;
 import com.mrmq.uyoutube.beans.ScreenSetting;
 import com.mrmq.uyoutube.config.Config;
+import com.mrmq.uyoutube.config.Context;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -71,7 +72,7 @@ public class UYouTubeMainController {
             @Override
             public void run() {
                 try {
-                    for (Video video: Config.uouTubeService.getMyUpload().values()) {
+                    for (Video video: Context.getYouTubeService().getMyUpload().values()) {
                         lvVideos.getItems().add(String.format("%s - %s - %s", video.getId(), video.getSnippet().getTitle(), video.getSnippet().getDescription()));
                     }
                 } catch (IOException e) {

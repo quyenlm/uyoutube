@@ -24,6 +24,7 @@ import com.github.axet.wget.info.ex.DownloadInterruptedError;
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.Video;
 import com.mrmq.uyoutube.config.Config;
+import com.mrmq.uyoutube.helper.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,7 +147,24 @@ public class DownloadService extends Thread {
         }
     }
 
+    private boolean validateVideo(String targetName, String destPath) {
+        File video = new File(FileHelper.createVideoFile(destPath, targetName));
+        if(video.exists()) {
+            double size =  video.length()/1024/1024;
+            if(size > 20)
+                return false;
+            video.delete();
+        }
+        return true;
+    }
+
     public void downloadVideo(String url, String targetName, String destPath) {
+        if(!validateVideo(targetName, destPath)) {
+            logger.warn("Video exist: no need download again: {}", FileHelper.createVideoFile(destPath, targetName));
+            return;
+        }
+
+        logger.info("start downloadVideo: {}", url);
         // ex: url = https://www.youtube.com/watch?v=_M0Jf2nuJac
         // ex: destPath = /Users/axet/Downloads/
 
@@ -202,6 +220,8 @@ public class DownloadService extends Thread {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        logger.info("end downloadVideo: {}", url);
     }
 
     public DownloadService(Channel channel){
@@ -219,7 +239,7 @@ public class DownloadService extends Thread {
             try {
                 Video video = downloadQueues.poll(1000, TimeUnit.MILLISECONDS);
                 if(video != null)
-                    downloadVideo(Config.YOUTUBE__WATCH_URL + video.getId(), video.getId(), Config.getDownloadPath());
+                    downloadVideo(Config.YOUTUBE__WATCH_URL + video.getId(), video.getId(), Config.getDownloadPath() + video.getSnippet().getChannelId() + File.separator);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }

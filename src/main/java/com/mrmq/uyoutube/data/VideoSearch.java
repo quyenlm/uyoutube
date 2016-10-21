@@ -36,7 +36,7 @@ import java.util.Properties;
 public class VideoSearch {
     private static final Logger logger = LoggerFactory.getLogger(UpdateVideo.class);
 
-    private static final long NUMBER_OF_VIDEOS_RETURNED = 25;
+    private static final long NUMBER_OF_VIDEOS_RETURNED = 50;
 
     /**
      * Initialize a YouTube object to search for videos on YouTube. Then
@@ -44,7 +44,7 @@ public class VideoSearch {
      *
      */
     public static List<SearchResult> search(String queryTerm, String channelId, String apiKey) {
-        List<SearchResult> searchResultList = null;
+        List<SearchResult> searchResultList = new ArrayList<SearchResult>();
         try {
             // This object is used to make YouTube Data API requests. The last
             // argument is required, but since we don't need anything
@@ -66,6 +66,7 @@ public class VideoSearch {
             if(channelId != null)
                 search.setChannelId(channelId);
 
+
             // Restrict the search results to only include videos. See:
             // https://developers.google.com/youtube/v3/docs/search/list#type
             search.setType("video");
@@ -74,9 +75,19 @@ public class VideoSearch {
             search.setFields("items(id/kind,id/videoId,snippet,snippet/channelId,snippet/title,snippet/description,snippet/thumbnails/default/url)");
             search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
 
-            // Call the API and print results.
-            SearchListResponse searchResponse = search.execute();
-            searchResultList = searchResponse.getItems();
+            boolean isEnd = false;
+            String pageToken = null;
+            while(!isEnd) {
+                if(pageToken != null)
+                    search.setPageToken(pageToken);
+
+                // Call the API and print results.
+                SearchListResponse searchResponse = search.execute();
+                searchResultList.addAll(searchResponse.getItems());
+                if(searchResponse.getNextPageToken() != null) {
+                    pageToken = searchResponse.getNextPageToken();
+                } else isEnd = true;
+            }
         } catch (GoogleJsonResponseException e) {
             logger.error("There was a service error", e);
         } catch (IOException e) {

@@ -2,9 +2,9 @@ package com.mrmq.uyoutube.windows;
 
 import com.google.api.services.youtube.model.Video;
 import com.mrmq.uyoutube.AppStartup;
+import com.mrmq.uyoutube.Context;
 import com.mrmq.uyoutube.beans.VideoDirectory;
 import com.mrmq.uyoutube.config.Config;
-import com.mrmq.uyoutube.config.Context;
 import com.mrmq.uyoutube.data.VideoSearch;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +16,6 @@ import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

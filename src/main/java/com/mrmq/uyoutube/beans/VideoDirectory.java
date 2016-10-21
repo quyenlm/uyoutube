@@ -138,7 +138,7 @@ public class VideoDirectory extends File {
         }
     }
 
-    public boolean addVideo(Video video) throws IOException {
+    public synchronized boolean addVideo(Video video) throws IOException {
         BufferedWriter writer = null;
         boolean result = false;
         try {

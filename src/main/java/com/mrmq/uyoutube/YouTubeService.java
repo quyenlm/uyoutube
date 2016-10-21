@@ -10,12 +10,18 @@ import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.mrmq.uyoutube.authenticate.Auth;
+import com.mrmq.uyoutube.beans.ErrorCode;
+import com.mrmq.uyoutube.beans.Result;
+import com.mrmq.uyoutube.beans.VideoDirectory;
+import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.data.MyUploads;
+import com.mrmq.uyoutube.data.VideoSearch;
 import com.mrmq.uyoutube.helper.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -223,6 +229,49 @@ public class YouTubeService {
         logger.info("Total videos: " + channelVideos.size());
         logger.debug("Channel videos: " + channelVideos);
         return videos;
+    }
+
+    public Result<Map<String, Video>> getNewVideos(String channelId){
+        Result<Map<String, Video>> result = new Result<Map<String, Video>>();
+        Map<String, Video> newVideos = new HashMap<String, Video>();
+
+        if(channelId.length() == 0) {
+            logger.error("Channel id invalid: {}", channelId);
+            result.setErrorCode(ErrorCode.CHANNEL_ID_INVALID);
+            return result;
+        }
+
+        try {
+            //load downloaded video in directory
+            VideoDirectory channelDir = Context.getVideosDir(channelId);
+            Map<String, Video> downloadedVideos = channelDir.loadInfo();
+            int total = 0;
+            int downloaded = 0;
+
+            //load video in channel from youtube
+            List<Video> search = VideoSearch.search(null, channelId);
+            if(search != null) {
+                total = search.size();
+
+                for (Video video : search) {
+                    if(!downloadedVideos.containsKey(video.getId())) {
+                        newVideos.put(video.getId(), video);
+                        channelDir.addVideo(video);
+                    } else
+                        downloaded++;
+                }
+            }
+            else
+                logger.error("Not found video in channel: {}", channelId);
+
+            logger.info(String.format("There are %d videos, downloaded: %d, remain: %d", total, downloaded, total - downloaded));
+            result.setErrorCode(ErrorCode.SUCCESS);
+            result.setValue(newVideos);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+
+        return result;
     }
 
     public String getChannelEmail() {

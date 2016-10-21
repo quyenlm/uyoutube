@@ -18,7 +18,7 @@
     <Text id="welcome-text" text="Re-up" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
 
     <Label id="lbChannelId" text="Channel Id:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    <TextField fx:id="txtChannelId" text="UCXF4WjTCUQSmGapnNEZzbYw" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+    <TextField fx:id="txtChannelId" text="UC0hLfuigaL4dixu8lXISnCQ" GridPane.columnIndex="2" GridPane.rowIndex="2" />
 
     <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="3" GridPane.rowIndex="2">
         <Button fx:id="btnRefresh" onAction="#handleRefreshButtonAction" text="Refresh" />

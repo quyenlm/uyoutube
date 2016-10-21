@@ -1,12 +1,11 @@
 package com.mrmq.uyoutube.windows;
 
-import com.google.api.services.youtube.model.Channel;
 import com.mrmq.uyoutube.AppStartup;
+import com.mrmq.uyoutube.Context;
 import com.mrmq.uyoutube.DownloadService;
 import com.mrmq.uyoutube.YouTubeService;
 import com.mrmq.uyoutube.beans.ScreenSetting;
 import com.mrmq.uyoutube.config.Config;
-import com.mrmq.uyoutube.config.Context;
 import com.mrmq.uyoutube.helper.Validator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

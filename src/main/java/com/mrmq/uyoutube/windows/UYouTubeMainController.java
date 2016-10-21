@@ -2,10 +2,9 @@ package com.mrmq.uyoutube.windows;
 
 import com.google.api.services.youtube.model.Video;
 import com.mrmq.uyoutube.AppStartup;
-import com.mrmq.uyoutube.YouTubeService;
+import com.mrmq.uyoutube.Context;
 import com.mrmq.uyoutube.beans.ScreenSetting;
 import com.mrmq.uyoutube.config.Config;
-import com.mrmq.uyoutube.config.Context;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,15 +16,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

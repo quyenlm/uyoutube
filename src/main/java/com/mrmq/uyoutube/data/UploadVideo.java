@@ -22,10 +22,13 @@ import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.api.services.youtube.model.VideoStatus;
-import com.mrmq.uyoutube.Result;
+import com.mrmq.uyoutube.beans.ErrorCode;
+import com.mrmq.uyoutube.beans.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
@@ -51,8 +54,8 @@ public class UploadVideo {
      * 2.0 to authorize the API request.
      *
      */
-    public Result upload(YouTube youtube, String title, String desc, String videoUri, List<String> tags) {
-        Result result = Result.FAIL;
+    public static Result upload(YouTube youtube, String title, String desc, String videoUri, List<String> tags) {
+        Result result = new Result();
 
         try {
             logger.info("Uploading: " + videoUri);
@@ -83,7 +86,8 @@ public class UploadVideo {
             // Add the completed snippet object to the video resource.
             videoObjectDefiningMetadata.setSnippet(snippet);
 
-            InputStreamContent mediaContent = new InputStreamContent(VIDEO_FILE_FORMAT, UploadVideo.class.getResourceAsStream(videoUri));
+            UploadVideo.class.getResourceAsStream(videoUri);
+            InputStreamContent mediaContent = new InputStreamContent(VIDEO_FILE_FORMAT, new FileInputStream(new File(videoUri)));
 
             // Insert the video. The command sends three arguments. The first
             // specifies which information the API request is setting and which
@@ -141,13 +145,16 @@ public class UploadVideo {
             logger.info("  - Privacy Status: " + returnedVideo.getStatus().getPrivacyStatus());
             logger.info("  - Video Count: " + returnedVideo.getStatistics().getViewCount());
 
-            result = Result.SUCCESS;
+            result.setErrorCode(ErrorCode.SUCCESS);
         } catch (GoogleJsonResponseException e) {
+            result.setErrorCode(ErrorCode.FAIL);
             logger.error("GoogleJsonResponseException code: " + e.getDetails().getCode() + " : " + e.getDetails().getMessage(), e);
         } catch (IOException e) {
+            result.setErrorCode(ErrorCode.FAIL);
             logger.error("IOException: " + e.getMessage(), e);
         } catch (Throwable t) {
-            logger.error("Throwable: " + t.getMessage());
+            result.setErrorCode(ErrorCode.FAIL);
+            logger.error("Throwable: " + t.getMessage(), t);
         }
 
         return result;

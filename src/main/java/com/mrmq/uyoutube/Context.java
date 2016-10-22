@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentMap;
 public class Context {
     private static YouTubeService youTubeService;
     private static DownloadService downloadService;
+    private static UploadService uploadService;
 
     private static ConcurrentMap<String, Object> beans = new ConcurrentHashMap<String, Object>();
 
@@ -30,12 +31,21 @@ public class Context {
         Context.downloadService = downloadService;
     }
 
+    public static UploadService getUploadService() {
+        return uploadService;
+    }
+
+    public static void setUploadService(UploadService uploadService) {
+        Context.uploadService = uploadService;
+    }
+
     public static <T> T getBeans(String key) {
         return (T) beans.get(key);
     }
 
-    public static <T> T setBeans(String key, Object bean) {
-        return (T) beans.put(key, bean);
+    public static <T> T setBeans(String key, T bean) {
+        beans.put(key, bean);
+        return bean;
     }
 
     public static VideoDirectory getVideosDir(String folderName) {

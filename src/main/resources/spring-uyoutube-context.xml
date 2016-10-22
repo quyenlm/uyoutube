@@ -9,6 +9,16 @@
         </property>
     </bean>
 
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="com.mrmq.uyoutube.config.Config.setDownloadPath"/>
+        <property name="arguments" value="${youtube.download_path}" />
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="com.mrmq.uyoutube.config.Config.setHomePath"/>
+        <property name="arguments" value="${youtube.home_path}" />
+    </bean>
+
     <!-- A simple bean definition -->
     <bean id="youTubeService" class="com.mrmq.uyoutube.YouTubeService">
         <property name="channelEmail" value="${youtube.channel.email}" />

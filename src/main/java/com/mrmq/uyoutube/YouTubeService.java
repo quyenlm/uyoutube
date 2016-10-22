@@ -29,29 +29,26 @@ import java.util.Map;
 public class YouTubeService {
     private static final Logger logger = LoggerFactory.getLogger(YouTubeService.class);
 
-    /**
-     * Define a global instance of a Youtube object, which will be used
-     * to make YouTube Data API requests.
-     */
     private YouTube youtube;
     private Credential credential;
     private YouTubeService service;
     private String channelEmail;
     private Channel channel;
+    private String infoPath;
     private Map<String, Video> videos = com.google.common.collect.Maps.newConcurrentMap();
 
     public YouTubeService() {
-
     }
 
     public YouTubeService(String ownerEmail) {
         this.channelEmail = ownerEmail;
+        this.infoPath = FileHelper.makerChannelFileName(channelEmail);
     }
 
     private void loadConfig() throws IOException {
         BufferedReader reader = null;
         try {
-            File configFile = new File(FileHelper.makerChannelFileName(channelEmail));
+            File configFile = new File(infoPath);
             if(!configFile.exists() || configFile.length() == 0)
                 initConfig(configFile);
 
@@ -101,21 +98,38 @@ public class YouTubeService {
             if(reader != null)
                 reader.close();
         }
+
+
     }
 
     private void initConfig(File configFile) throws IOException {
         BufferedWriter writer = null;
         try {
+            if(!configFile.getParentFile().exists())
+                configFile.getParentFile().mkdirs();
+
             if (!configFile.exists()) {
                 configFile.createNewFile();
             }
+
+            List<Channel> channels = MyUploads.getMyChannels(getYouTube());
+            if(channels != null && channels.size() > 0)
+                channel = channels.get(0);
 
             writer = new BufferedWriter(new FileWriter(configFile));
 
             //write data from csv
             //line 1, 2: channel_email, channel_id, channel_name, channel_desc
             writer.write("#channel_email<>channel_id<>channel_name<>channel_desc"); writer.newLine();
-            writer.write(channelEmail + FileHelper.CSV_SPLIT + FileHelper.CSV_SPLIT + FileHelper.CSV_SPLIT); writer.newLine();
+            if(channel != null) {
+                String channelTitle = channel.getSnippet() != null ? channel.getSnippet().getTitle() : "";
+                String channelDesc = channel.getSnippet() != null ? channel.getSnippet().getDescription() : "";
+
+                writer.write(channelEmail + FileHelper.CSV_SPLIT + channel.getId() + FileHelper.CSV_SPLIT + channelTitle + FileHelper.CSV_SPLIT + channelDesc);
+            } else {
+                writer.write(channelEmail + FileHelper.CSV_SPLIT + FileHelper.CSV_SPLIT + FileHelper.CSV_SPLIT);
+            }
+            writer.newLine();
             //line 3, 4: source_id, video_id, video_title, video_desc, video_tags
             writer.write("#source_id<>video_id<>video_title<>video_desc<>video_tags"); writer.newLine();
         } catch (Exception e) {
@@ -159,6 +173,30 @@ public class YouTubeService {
 
     }
 
+    public synchronized boolean addVideoTrace(String sourceId, Video video) throws IOException {
+        BufferedWriter writer = null;
+        boolean result = false;
+        try {
+            if(videos.containsKey(video.getId()))
+                return false;
+
+            writer = new BufferedWriter(new FileWriter(infoPath, true));
+            //write data to csv
+            //line 1, 2: source_id, video_id, video_title, video_desc, video_tags
+            writer.write(FileHelper.toCsv(sourceId, video)); writer.newLine();
+
+            videos.put(video.getId(), video);
+            result = true;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            if(writer != null)
+                writer.close();
+        }
+
+        return result;
+    }
+
     public boolean login() throws IOException {
         // This OAuth 2.0 access scope allows for full read/write access to the
         // authenticated user's account.
@@ -180,7 +218,7 @@ public class YouTubeService {
         return credential;
     }
 
-    private YouTube getYouTube() throws IOException {
+    public YouTube getYouTube() throws IOException {
         if(youtube == null) {
             // This object is used to make YouTube Data API requests.
             youtube = new YouTube.Builder(Auth.HTTP_TRANSPORT, Auth.JSON_FACTORY, credential)
@@ -189,7 +227,19 @@ public class YouTubeService {
         return youtube;
     }
 
-    private void uploadVideo(String videoDirectory) throws IOException {
+    private void uploadVideo(String dirname) throws IOException {
+        VideoDirectory channelDir = Context.getVideosDir(dirname);
+        if(channelDir == null) {
+            logger.error("Not found dir: {}", dirname);
+            return;
+        }
+
+        Map<String, Video> downloadedVideos = channelDir.loadInfo();
+        if(downloadedVideos == null || downloadedVideos.size() == 0) {
+            logger.error("Not found video of dir: {}", dirname);
+            return;
+        }
+
 
     }
 
@@ -274,11 +324,33 @@ public class YouTubeService {
         return result;
     }
 
+    public void download(Map<String, Video> videos) {
+        if(videos != null && videos.size() > 0)
+            for (Video video: videos.values()) {
+                Context.getDownloadService().add(video);
+            }
+    }
+
+    public void upload(Map<String, Video> videos) {
+        if(videos != null && videos.size() > 0)
+            for (Video video: videos.values()) {
+                Context.getUploadService().add(video);
+            }
+    }
+
     public String getChannelEmail() {
         return channelEmail;
     }
 
     public void setChannelEmail(String channelEmail) {
         this.channelEmail = channelEmail;
+    }
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
     }
 }

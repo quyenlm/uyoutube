@@ -21,6 +21,7 @@ import com.github.axet.wget.info.DownloadInfo;
 import com.github.axet.wget.info.DownloadInfo.Part;
 import com.github.axet.wget.info.DownloadInfo.Part.States;
 import com.github.axet.wget.info.ex.DownloadInterruptedError;
+import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.Video;
 import com.mrmq.uyoutube.config.Config;
@@ -28,12 +29,26 @@ import com.mrmq.uyoutube.helper.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DownloadService extends Thread {
-    private static final Logger logger = LoggerFactory.getLogger(DownloadService.class);
-    private BlockingQueue<Video> downloadQueues = new LinkedBlockingQueue<Video>();
-
-    private boolean isRunning = false;
+public class DownloadService extends Service {
     private Channel channel;
+
+    public DownloadService(YouTube youTube){
+        super(youTube);
+    }
+
+    @Override
+    public void run() {
+        isRunning = true;
+        while (isRunning) {
+            try {
+                Video video = queues.poll(1000, TimeUnit.MILLISECONDS);
+                if(video != null)
+                    downloadVideo(Config.YOUTUBE__WATCH_URL + video.getId(), video.getId(), Config.getDownloadPath() + video.getSnippet().getChannelId() + File.separator);
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+    }
 
     static class VGetStatus implements Runnable {
         VideoInfo videoinfo;
@@ -103,7 +118,7 @@ public class DownloadService extends Thread {
                     break;
                 case DOWNLOADING:
                     long now = System.currentTimeMillis();
-                    if (now - 1000 > last) {
+                    if (now - 10000 > last) {
                         last = now;
 
                         String parts = "";
@@ -222,32 +237,5 @@ public class DownloadService extends Thread {
         }
 
         logger.info("end downloadVideo: {}", url);
-    }
-
-    public DownloadService(Channel channel){
-        this.channel = channel;
-    }
-
-    public void add(Video video) {
-        downloadQueues.add(video);
-    }
-
-    @Override
-    public void run() {
-        isRunning = true;
-        while (isRunning) {
-            try {
-                Video video = downloadQueues.poll(1000, TimeUnit.MILLISECONDS);
-                if(video != null)
-                    downloadVideo(Config.YOUTUBE__WATCH_URL + video.getId(), video.getId(), Config.getDownloadPath() + video.getSnippet().getChannelId() + File.separator);
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
-    }
-
-    public void stopDownload() {
-        isRunning  = false;
-        this.interrupt();
     }
 }

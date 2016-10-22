@@ -17,8 +17,8 @@ public class Config {
 
     private static final String appName = "uYouTube";
     private static String apiKey = "AIzaSyB46r92ADOWDL3CIFdcMaB8auZ3_2iEmK4";
-    private static String homePath = "";
-    private static String downloadPath = "D:\\House\\Videos\\";
+    private static String homePath = ".";
+    private static String downloadPath = "./download/videos/";
 
     static {
         screenSetting.put(ScreenSetting.SCREEN_MAIN, new ScreenSetting(1024, 768));
@@ -39,6 +39,18 @@ public class Config {
 
     public static String getDownloadPath() {
         return downloadPath;
+    }
+
+    public static void setDownloadPath(String downloadPath) {
+        Config.downloadPath = downloadPath;
+    }
+
+    public static String getHomePath() {
+        return homePath;
+    }
+
+    public static void setHomePath(String homePath) {
+        Config.homePath = homePath;
     }
 
     public static String getVideoType() {

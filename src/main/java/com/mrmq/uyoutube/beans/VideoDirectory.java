@@ -129,7 +129,7 @@ public class VideoDirectory extends File {
 
             //write data to csv
             //line 1, 2: video_id, channel_id, video_title, video_desc, video_tags
-            writer.write("#video_id<>channel_id<>video_title<>video_desc, video_tags"); writer.newLine();
+            writer.write("#video_id<>channel_id<>video_title<>video_desc<>video_tags"); writer.newLine();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -142,10 +142,15 @@ public class VideoDirectory extends File {
         BufferedWriter writer = null;
         boolean result = false;
         try {
+            if(videos.containsKey(video.getId()))
+                return false;
+
             writer = new BufferedWriter(new FileWriter(FileHelper.createFilePath(dirPath, VIDEOS_DIR_INI), true));
             //write data to csv
             //line 1, 2: video_id, channel_id, video_title, video_desc, video_tags
             writer.write(FileHelper.toCsv(video)); writer.newLine();
+
+            videos.put(video.getId(), video);
             result = true;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

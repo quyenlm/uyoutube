@@ -11,10 +11,10 @@ import java.util.List;
 public class FileHelper {
     private static final Logger logger = LoggerFactory.getLogger(FileHelper.class);
     public static final String CSV_SPLIT = "<>";
-    public static final String TAG_SPLIT = "#";
+    public static final String TAG_SPLIT = "><";
 
     public static String makerChannelFileName(String channelEmail) {
-        return channelEmail + ".ini";
+        return Config.getHomePath() + "data" + File.separator +  channelEmail + ".ini";
     }
 
     public static String createFilePath(String dirPath, String fileName) {
@@ -29,6 +29,12 @@ public class FileHelper {
         else return dirPath + File.separator + fileName + Config.getVideoType();
     }
 
+    public static String createVideoFile(String dirPath, String channelId, String fileName) {
+        if(dirPath.endsWith(File.separator))
+            return dirPath + channelId + File.separator + fileName + Config.getVideoType();
+        else return dirPath + File.separator + channelId + File.separator + fileName + Config.getVideoType();
+    }
+
     public static String toCsv(Video video) {
         StringBuilder strB = new StringBuilder();
 
@@ -40,7 +46,8 @@ public class FileHelper {
         strB.append(video.getSnippet().getTitle());
         strB.append(CSV_SPLIT);
         strB.append(video.getSnippet().getDescription());
-
+        strB.append(CSV_SPLIT);
+        strB.append(toTags(video.getSnippet().getTags()));
         return strB.toString();
     }
 

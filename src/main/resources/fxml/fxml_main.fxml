@@ -47,7 +47,7 @@
 
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
-<GridPane alignment="center" hgap="10" prefHeight="485.0" prefWidth="779.0" styleClass="root" vgap="10" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1"
+<GridPane alignment="center" hgap="10" maxHeight="Infinity" maxWidth="Infinity" styleClass="root" vgap="5" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="com.mrmq.uyoutube.windows.UYouTubeMainController">
     <stylesheets>
         <URL value="@Login.css" />
@@ -68,15 +68,15 @@
 
     <HBox spacing="10" alignment="bottom_right"
           GridPane.columnIndex="2" GridPane.rowIndex="5">
-        <Button fx:id="btnShowReup" text="Re-up videos"
+        <Button fx:id="btnShowReup" text="Re-up videos" disable="false"
                 onAction="#handleSubmitButtonAction" />
     </HBox>
 
     <Text fx:id="actiontarget" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
-    <ListView fx:id="lvVideos" GridPane.fillHeight="2" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="2" />
+    <ListView fx:id="lvVideos" GridPane.fillHeight="2" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="4" />
 
-    <AnchorPane GridPane.columnIndex="2" GridPane.rowIndex="8" GridPane.columnSpan="2" >
+    <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.columnSpan="4" >
         <children>
             <ProgressBar fx:id="progressBar" progress="0.0" />
         </children>

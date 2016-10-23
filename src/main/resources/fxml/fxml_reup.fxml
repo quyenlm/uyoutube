@@ -12,16 +12,22 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ProgressBar?>
 <GridPane alignment="center" hgap="10" prefHeight="485.0" prefWidth="779.0" styleClass="root" vgap="10" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mrmq.uyoutube.windows.UYouTubeReupController">
     <padding><Insets bottom="10" left="25" right="25" top="25" /></padding>
+
+    <stylesheets>
+        <URL value="@Login.css" />
+    </stylesheets>
 
     <Text id="welcome-text" text="Re-up" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
 
     <Label id="lbChannelId" text="Channel Id:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    <TextField fx:id="txtChannelId" text="UC0hLfuigaL4dixu8lXISnCQ" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+    <TextField fx:id="txtChannelId" text="UCph-WGR0oCbJDpaWmNHb5zg" GridPane.columnIndex="2" GridPane.rowIndex="2" />
 
     <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="3" GridPane.rowIndex="2">
-        <Button fx:id="btnRefresh" onAction="#handleRefreshButtonAction" text="Refresh" />
+        <Button fx:id="btnRefresh" onAction="#handleButtonAction" text="Refresh" />
     </HBox>
 
     <Label id="lbChannelName" text="Channel Name:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -33,18 +39,24 @@
     <Text fx:id="txtMessage" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
     <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="5">
-        <Button fx:id="btnDownloadVideo" text="Download" disable="true" onAction="#handleDownloadButtonAction"/>
+        <Button fx:id="btnDownloadVideo" text="Download" disable="true" onAction="#handleButtonAction"/>
     </HBox>
 
     <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="4" GridPane.rowIndex="5">
-        <Button fx:id="btnReupVideo" text="Re-up videos" disable="true" onAction="#handleReupButtonAction"/>
+        <Button fx:id="btnReupVideo" text="Re-up videos" disable="true" onAction="#handleButtonAction"/>
     </HBox>
 
-    <ListView fx:id="lvVideos" GridPane.fillHeight="2" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="2" />
-    <ListView fx:id="lvDownloaded" GridPane.fillHeight="2" GridPane.columnIndex="3" GridPane.rowIndex="7" GridPane.columnSpan="2" />
+    <Label fx:id="lbNewVideos" text="News videos" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+    <ListView fx:id="lvNewVideos" GridPane.fillHeight="2" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="2" />
 
-    <stylesheets>
-        <URL value="@Login.css" />
-    </stylesheets>
+    <Label fx:id="lbDownloaded" text="Downloaded videos" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+    <ListView fx:id="lvDownloaded" GridPane.fillHeight="2" GridPane.columnIndex="3" GridPane.rowIndex="7" GridPane.columnSpan="2" />
+    <ProgressBar fx:id="progressBarReup" progress="0.0" GridPane.columnIndex="3" GridPane.rowIndex="8" GridPane.columnSpan="2"/>
+
+    <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.columnSpan="4" >
+        <children>
+            <ProgressBar fx:id="progressBarDownload" progress="0.0" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.columnSpan="2" />
+        </children>
+    </AnchorPane>
 
 </GridPane>

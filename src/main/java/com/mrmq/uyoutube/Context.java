@@ -6,6 +6,8 @@ import com.mrmq.uyoutube.config.Config;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Context {
     private static YouTubeService youTubeService;
@@ -13,14 +15,14 @@ public class Context {
     private static UploadService uploadService;
 
     private static ConcurrentMap<String, Object> beans = new ConcurrentHashMap<String, Object>();
-
+    private static ExecutorService executor = Executors.newCachedThreadPool();
 
     public static YouTubeService getYouTubeService() {
         return youTubeService;
     }
 
     public static void setYouTubeService(YouTubeService youTubeService) {
-        youTubeService = youTubeService;
+        Context.youTubeService = youTubeService;
     }
 
     public static DownloadService getDownloadService() {
@@ -53,5 +55,9 @@ public class Context {
         if(channelDir == null)
             channelDir = setBeans(folderName, new VideoDirectory(Config.getDownloadPath() + folderName));
         return channelDir;
+    }
+
+    public static ExecutorService getExecutor() {
+        return executor;
     }
 }

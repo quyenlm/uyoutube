@@ -54,8 +54,7 @@ public class UYouTubeLoginController {
                         ScreenSetting setting = Config.getScreenSetting().get(ScreenSetting.SCREEN_MAIN);
                         scene = new Scene(root, setting.getWidth(), setting.getHeight());
 
-                        Context.setDownloadService(new DownloadService(null));
-                        Context.getDownloadService().start();
+                        Context.getYouTubeService().startService();
                     } else {
                         txtMessage.setText("Email/Pass not correct");
                     }

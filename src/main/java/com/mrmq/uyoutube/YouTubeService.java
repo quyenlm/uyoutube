@@ -207,6 +207,21 @@ public class YouTubeService {
         return credential != null;
     }
 
+    public boolean startService() throws IOException {
+        if(Context.getDownloadService() == null)
+            Context.setDownloadService(new DownloadService(null));
+        if(!Context.getDownloadService().isRunning)
+            Context.getDownloadService().start();
+
+        if(Context.getUploadService() == null)
+            Context.setUploadService(new UploadService(getYouTube()));
+        if(!Context.getUploadService().isRunning){
+            Context.getUploadService().setYouTubeService(service);
+            Context.getUploadService().start();
+        }
+        return true;
+    }
+
     private Credential login(List<String> scopes, String credentialDatastore) throws IOException {
         if(credential == null) {
             // Authorize the request.
@@ -299,7 +314,7 @@ public class YouTubeService {
             int downloaded = 0;
 
             //load video in channel from youtube
-            List<Video> search = VideoSearch.search(null, channelId);
+            List<Video> search = VideoSearch.search(null, channelId, Config.getApiKey());
             if(search != null) {
                 total = search.size();
 
@@ -344,6 +359,7 @@ public class YouTubeService {
 
     public void setChannelEmail(String channelEmail) {
         this.channelEmail = channelEmail;
+        this.infoPath = FileHelper.makerChannelFileName(channelEmail);
     }
 
     public Channel getChannel() {

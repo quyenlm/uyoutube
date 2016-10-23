@@ -45,7 +45,7 @@ public class Search {
      */
     private static final String PROPERTIES_FILENAME = "youtube.properties";
 
-    private static final long NUMBER_OF_VIDEOS_RETURNED = 25;
+    private static final long NUMBER_OF_VIDEOS_RETURNED = 50;
 
     /**
      * Define a global instance of a Youtube object, which will be used

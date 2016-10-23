@@ -19,8 +19,12 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.*;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.mrmq.uyoutube.authenticate.Auth;
 import com.mrmq.uyoutube.config.Config;
+import com.mrmq.uyoutube.helper.Converter;
+import javafx.concurrent.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,23 +32,24 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
-public class VideoSearch {
+public class VideoSearch extends Task {
     private static final Logger logger = LoggerFactory.getLogger(UpdateVideo.class);
 
     private static final long NUMBER_OF_VIDEOS_RETURNED = 50;
+
+    public static List<Video> search(String queryTerm, String channelId, String apiKey) {
+        return search(queryTerm, channelId, apiKey, null);
+    }
 
     /**
      * Initialize a YouTube object to search for videos on YouTube. Then
      * display the name and thumbnail image of each video in the result set.
      *
      */
-    public static List<SearchResult> search(String queryTerm, String channelId, String apiKey) {
-        List<SearchResult> searchResultList = new ArrayList<SearchResult>();
+    public static List<Video> search(String queryTerm, String channelId, String apiKey, Function<Integer, Void> function) {
+        Map<String, Video> searchResultList = new HashMap<String, Video>();
         try {
             // This object is used to make YouTube Data API requests. The last
             // argument is required, but since we don't need anything
@@ -61,32 +66,59 @@ public class VideoSearch {
             // Set your developer key from the {{ Google Cloud Console }} for non-authenticated requests. See:
             // {{ https://cloud.google.com/console }}
             search.setKey(apiKey);
+            search.setPart("snippet");
+            search.setOrder("relevance");
             if(queryTerm != null)
                 search.setQ(queryTerm);
             if(channelId != null)
                 search.setChannelId(channelId);
-
 
             // Restrict the search results to only include videos. See:
             // https://developers.google.com/youtube/v3/docs/search/list#type
             search.setType("video");
 
             // To increase efficiency, only retrieve the fields that the application uses.
-            search.setFields("items(id/kind,id/videoId,snippet,snippet/channelId,snippet/title,snippet/description,snippet/thumbnails/default/url)");
+            search.setFields("pageInfo,prevPageToken,nextPageToken,items(id/kind,id/videoId,snippet,snippet/channelId,snippet/title,snippet/description,snippet/thumbnails/default/url)");
             search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
 
-            boolean isEnd = false;
+            boolean isFirst = true;
             String pageToken = null;
-            while(!isEnd) {
-                if(pageToken != null)
+            ArrayList<String> loadedTokens = new ArrayList<String>();
+            PageInfo pageInfo = null;
+
+            Queue<String> queuePageTokens = new LinkedList<String>();
+
+            while(isFirst || queuePageTokens.size() > 0) {
+                isFirst = false;
+                pageToken = queuePageTokens.poll();
+                if(pageToken != null) {
                     search.setPageToken(pageToken);
+                    loadedTokens.add(pageToken);
+                }
 
                 // Call the API and print results.
                 SearchListResponse searchResponse = search.execute();
-                searchResultList.addAll(searchResponse.getItems());
-                if(searchResponse.getNextPageToken() != null) {
-                    pageToken = searchResponse.getNextPageToken();
-                } else isEnd = true;
+                if(pageInfo == null && searchResponse.getPageInfo() != null)
+                    pageInfo = searchResponse.getPageInfo();
+
+                if(searchResponse.getItems() != null && searchResponse.getItems().size() > 0) {
+                    for (SearchResult searchResult : searchResponse.getItems()) {
+                        Video video = Converter.convert(searchResult);
+                        logger.info(String.valueOf(video));
+                        searchResultList.put(video.getId(), video);
+                    }
+
+                    //notify percent download
+                    if(function != null && pageInfo != null && pageInfo.getTotalResults() != null) {
+                        function.apply((100 * searchResultList.size() / pageInfo.getTotalResults()));
+                        logger.info("searchResult/total: {}/{}", searchResultList.size(), pageInfo.getTotalResults());
+                    }
+                }
+
+                if(searchResponse.getNextPageToken() != null && !loadedTokens.contains(searchResponse.getNextPageToken()))
+                    queuePageTokens.add(searchResponse.getNextPageToken());
+//                if(searchResponse.getPrevPageToken() != null && !loadedTokens.contains(searchResponse.getPrevPageToken()))
+//                    queuePageTokens.add(searchResponse.getPrevPageToken());
             }
         } catch (GoogleJsonResponseException e) {
             logger.error("There was a service error", e);
@@ -96,40 +128,11 @@ public class VideoSearch {
             logger.error(t.getMessage(), t);
         }
 
-        return searchResultList;
+        return Lists.newArrayList(searchResultList.values());
     }
 
-    public static List<Video> search(String termKey, String channelId) {
-        List<Video> lstVideos = new ArrayList<Video>();
-        List<SearchResult> search = search(termKey, channelId, Config.getApiKey());
-        if(search != null) {
-            Iterator<SearchResult> iteratorSearchResults = search.iterator();
-
-            while (iteratorSearchResults.hasNext()) {
-                SearchResult singleVideo = iteratorSearchResults.next();
-                ResourceId rId = singleVideo.getId();
-
-                // Confirm that the result represents a video. Otherwise, the
-                // item will not contain a video ID.
-                if (rId.getKind().equals("youtube#video")) {
-                    Video video = new Video();
-                    Thumbnail thumbnail = singleVideo.getSnippet().getThumbnails().getDefault();
-
-                    video.setId(rId.getVideoId());
-                    VideoSnippet snippet = new VideoSnippet();
-                    snippet.setTitle(singleVideo.getSnippet().getTitle());
-                    snippet.setDescription(singleVideo.getSnippet().getDescription());
-                    snippet.setChannelId(singleVideo.getSnippet().getChannelId());
-
-                    video.setSnippet(snippet);
-
-                    lstVideos.add(video);
-
-                    logger.info(String.valueOf(video));
-                }
-            }
-        }
-
-        return lstVideos;
+    @Override
+    protected Object call() throws Exception {
+        return null;
     }
 }

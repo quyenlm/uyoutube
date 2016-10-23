@@ -24,6 +24,7 @@ import com.github.axet.wget.info.ex.DownloadInterruptedError;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.Video;
+import com.mrmq.uyoutube.beans.VideoDirectory;
 import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.helper.FileHelper;
 import org.slf4j.Logger;
@@ -43,7 +44,7 @@ public class DownloadService extends Service {
             try {
                 Video video = queues.poll(1000, TimeUnit.MILLISECONDS);
                 if(video != null)
-                    downloadVideo(Config.YOUTUBE__WATCH_URL + video.getId(), video.getId(), Config.getDownloadPath() + video.getSnippet().getChannelId() + File.separator);
+                    downloadVideo(video);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }
@@ -173,7 +174,11 @@ public class DownloadService extends Service {
         return true;
     }
 
-    public void downloadVideo(String url, String targetName, String destPath) {
+    public void downloadVideo(Video video) {
+        String url = Config.getYoutubeWatchUrl() + video.getId();
+        String targetName = video.getId();
+        String destPath = Config.getDownloadPath() + video.getSnippet().getChannelId() + File.separator;
+
         if(!validateVideo(targetName, destPath)) {
             logger.warn("Video exist: no need download again: {}", FileHelper.createVideoFile(destPath, targetName));
             return;
@@ -182,7 +187,10 @@ public class DownloadService extends Service {
         logger.info("start downloadVideo: {}", url);
         // ex: url = https://www.youtube.com/watch?v=_M0Jf2nuJac
         // ex: destPath = /Users/axet/Downloads/
-
+        if(true) {
+            logger.info("end downloadVideo: {}", url);
+            return;
+        }
         try {
             final AtomicBoolean stop = new AtomicBoolean(false);
 
@@ -203,7 +211,7 @@ public class DownloadService extends Service {
 
             // create proper videoinfo to keep specific video information
             VideoInfo videoinfo = user.info(web);
-            videoinfo.setId(url.replace(Config.YOUTUBE__WATCH_URL, ""));
+            videoinfo.setId(url.replace(Config.getYoutubeWatchUrl(), ""));
 
             File destDir = new File(destPath);
             VGet v = new VGet(videoinfo, destDir);
@@ -228,6 +236,10 @@ public class DownloadService extends Service {
             }
 
             v.download(user, stop, notify);
+
+            //Save to ini file
+            VideoDirectory channelDir = new VideoDirectory(Config.getDownloadPath() + video.getSnippet().getChannelId());
+            channelDir.addVideo(video);
         } catch (DownloadInterruptedError e) {
             throw e;
         } catch (RuntimeException e) {

@@ -82,6 +82,7 @@ public class VideoDirectory extends File {
                         String[] arrTags = arrTmp[4].split(FileHelper.TAG_SPLIT);
                         snippet.setTags(Lists.newArrayList(arrTags));
                     }
+                    video.setSnippet(snippet);
 
                     videos.put(video.getId(), video);
                 }
@@ -113,7 +114,7 @@ public class VideoDirectory extends File {
         Iterator<String> itKey = videos.keySet().iterator();
         while (itKey.hasNext()) {
             String fileName = itKey.next();
-            if (currentFiles.containsKey(fileName))
+            if (!currentFiles.containsKey(fileName))
                 itKey.remove();
         }
     }

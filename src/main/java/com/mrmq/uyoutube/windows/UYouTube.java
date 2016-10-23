@@ -8,12 +8,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 
 public class UYouTube extends Application {
 
     public static void main(String[] args) {
+        String[] xmlConfigs = new String[]{"classpath:spring-uyoutube-context.xml"};
+        ApplicationContext ctx = new ClassPathXmlApplicationContext(xmlConfigs);
+        Config.init();
         Application.launch(UYouTube.class, args);
     }
 

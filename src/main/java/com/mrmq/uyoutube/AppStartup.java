@@ -50,13 +50,7 @@ public class AppStartup {
             service = new YouTubeService(email);
             Context.setYouTubeService(service);
             service.login();
-
-            Context.setDownloadService(new DownloadService(null));
-            Context.getDownloadService().start();
-
-            Context.setUploadService(new UploadService(service.getYouTube()));
-            Context.getUploadService().setYouTubeService(service);
-            Context.getUploadService().start();
+            Context.getYouTubeService().startService();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

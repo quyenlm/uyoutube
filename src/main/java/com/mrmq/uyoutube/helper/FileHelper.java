@@ -13,6 +13,10 @@ public class FileHelper {
     public static final String CSV_SPLIT = "<>";
     public static final String TAG_SPLIT = "><";
 
+    public static String makerChannelDataPath() {
+        return Config.getHomePath() + "data";
+    }
+
     public static String makerChannelFileName(String channelEmail) {
         return Config.getHomePath() + "data" + File.separator +  channelEmail + ".ini";
     }

@@ -187,10 +187,6 @@ public class DownloadService extends Service {
         logger.info("start downloadVideo: {}", url);
         // ex: url = https://www.youtube.com/watch?v=_M0Jf2nuJac
         // ex: destPath = /Users/axet/Downloads/
-        if(true) {
-            logger.info("end downloadVideo: {}", url);
-            return;
-        }
         try {
             final AtomicBoolean stop = new AtomicBoolean(false);
 

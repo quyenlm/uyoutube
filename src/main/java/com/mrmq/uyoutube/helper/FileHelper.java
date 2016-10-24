@@ -12,6 +12,7 @@ public class FileHelper {
     private static final Logger logger = LoggerFactory.getLogger(FileHelper.class);
     public static final String CSV_SPLIT = "<>";
     public static final String TAG_SPLIT = "><";
+    public static final String VIDEO_SUFFIX = "_merged";
 
     public static String makerChannelDataPath() {
         return Config.getHomePath() + "data";
@@ -31,6 +32,12 @@ public class FileHelper {
         if(dirPath.endsWith(File.separator))
             return dirPath + fileName + Config.getVideoType();
         else return dirPath + File.separator + fileName + Config.getVideoType();
+    }
+
+    public static String createVideoUploadFile(String dirPath, String videoId) {
+        if(dirPath.endsWith(File.separator))
+            return dirPath + videoId + VIDEO_SUFFIX + Config.getVideoType();
+        else return dirPath + File.separator + videoId + Config.getVideoType();
     }
 
     public static String createVideoFile(String dirPath, String channelId, String fileName) {

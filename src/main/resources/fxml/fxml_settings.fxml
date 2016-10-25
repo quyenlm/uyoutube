@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Text?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextArea?>
+<GridPane alignment="center" hgap="10" prefHeight="485.0" prefWidth="779.0" styleClass="root" vgap="10" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mrmq.uyoutube.windows.UYouTubeSettingController">
+    <padding><Insets bottom="10" left="25" right="25" top="25" /></padding>
+
+    <stylesheets>
+        <URL value="@Login.css" />
+    </stylesheets>
+
+    <Text id="welcome-text" text="Settings" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+
+    <Label id="lbChannelId" text="Title replace" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    <TextField fx:id="txtTitleOld" text="[Official]" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+    <TextField fx:id="txtTitleNews" text="[Larvar Tuba]" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+
+    <Label id="lbDesc" text="Description replace" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <TextField fx:id="txtDescOld" text="" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+    <TextField fx:id="txtDescNews" text="" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+
+    <Label id="lbDescAppend" text="Description append" GridPane.columnIndex="1" GridPane.rowIndex="4"  />
+    <TextArea fx:id="txtDescAppend" text="" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.columnSpan="3" />
+
+    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="4" GridPane.rowIndex="5" >
+        <Button fx:id="btnSave" onAction="#handleButtonAction" text="Save" />
+    </HBox>
+
+</GridPane>

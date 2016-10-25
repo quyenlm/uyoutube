@@ -106,7 +106,7 @@ public class UYouTubeReupController {
             @Override
             protected Object call() throws Exception {
                 //load downloaded video in directory
-                VideoDirectory channelDir = new VideoDirectory(Config.getDownloadPath() + channelId);
+                VideoDirectory channelDir = new VideoDirectory(Config.getInstance().getDownloadPath() + channelId);
                 final Map<String, Video> downloadedVideos = channelDir.loadInfo();
                 if(downloadedVideos.size() > 0)
                     Platform.runLater(new Runnable(){
@@ -120,7 +120,7 @@ public class UYouTubeReupController {
                     });
 
                 //load video in channel from youtube
-                final List<Video> search = VideoSearch.search(null, channelId, Config.getApiKey(), new Function<Integer, Void>() {
+                final List<Video> search = VideoSearch.search(null, channelId, Config.getInstance().getApiKey(), new Function<Integer, Void>() {
                     @Nullable
                     @Override
                     public Void apply(@Nullable Integer integer) {

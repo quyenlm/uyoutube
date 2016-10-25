@@ -15,11 +15,11 @@ public class FileHelper {
     public static final String VIDEO_SUFFIX = "_merged";
 
     public static String makerChannelDataPath() {
-        return Config.getHomePath() + "data";
+        return Config.getInstance().getHomePath() + "data";
     }
 
     public static String makerChannelFileName(String channelEmail) {
-        return Config.getHomePath() + "data" + File.separator +  channelEmail + ".ini";
+        return Config.getInstance().getHomePath() + "data" + File.separator +  channelEmail + ".ini";
     }
 
     public static String createFilePath(String dirPath, String fileName) {
@@ -30,20 +30,20 @@ public class FileHelper {
 
     public static String createVideoFile(String dirPath, String fileName) {
         if(dirPath.endsWith(File.separator))
-            return dirPath + fileName + Config.getVideoType();
-        else return dirPath + File.separator + fileName + Config.getVideoType();
+            return dirPath + fileName + Config.getInstance().getVideoType();
+        else return dirPath + File.separator + fileName + Config.getInstance().getVideoType();
     }
 
     public static String createVideoUploadFile(String dirPath, String videoId) {
         if(dirPath.endsWith(File.separator))
-            return dirPath + videoId + VIDEO_SUFFIX + Config.getVideoType();
-        else return dirPath + File.separator + videoId + Config.getVideoType();
+            return dirPath + videoId + VIDEO_SUFFIX + Config.getInstance().getVideoType();
+        else return dirPath + File.separator + videoId + Config.getInstance().getVideoType();
     }
 
     public static String createVideoFile(String dirPath, String channelId, String fileName) {
         if(dirPath.endsWith(File.separator))
-            return dirPath + channelId + File.separator + fileName + Config.getVideoType();
-        else return dirPath + File.separator + channelId + File.separator + fileName + Config.getVideoType();
+            return dirPath + channelId + File.separator + fileName + Config.getInstance().getVideoType();
+        else return dirPath + File.separator + channelId + File.separator + fileName + Config.getInstance().getVideoType();
     }
 
     public static String toCsv(Video video) {

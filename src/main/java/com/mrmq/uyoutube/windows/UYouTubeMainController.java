@@ -1,10 +1,12 @@
 package com.mrmq.uyoutube.windows;
 
+import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.Video;
 import com.mrmq.uyoutube.AppStartup;
 import com.mrmq.uyoutube.Context;
 import com.mrmq.uyoutube.beans.ScreenSetting;
 import com.mrmq.uyoutube.config.Config;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.text.Text;
@@ -30,6 +33,12 @@ public class UYouTubeMainController implements Initializable {
     @FXML private Text actiontarget;
     @FXML private Button btnShowReup;
     @FXML private ListView lvVideos;
+    @FXML private Label lbChannelIdValue;
+    @FXML private Label lbChannelNameValue;
+    @FXML private Label lbChannelVideoValue;
+
+    @FXML private Button btnSettings;
+
     @FXML private ProgressBar progressBar;
     private Task loadChannelWorker;
 
@@ -57,6 +66,11 @@ public class UYouTubeMainController implements Initializable {
             if(event.getSource() == btnShowReup) {
                 stage = (Stage) btnShowReup.getScene().getWindow();
                 root = FXMLLoader.load(getClass().getResource("../../../../fxml/fxml_reup.fxml"));
+                ScreenSetting setting = Config.getScreenSetting().get(ScreenSetting.SCREEN_MAIN);
+                scene = new Scene(root, setting.getWidth(), setting.getHeight());
+            } else if(event.getSource() == btnSettings) {
+                stage = (Stage) btnSettings.getScene().getWindow();
+                root = FXMLLoader.load(getClass().getResource("../../../../fxml/fxml_settings.fxml"));
                 ScreenSetting setting = Config.getScreenSetting().get(ScreenSetting.SCREEN_MAIN);
                 scene = new Scene(root, setting.getWidth(), setting.getHeight());
             }
@@ -88,7 +102,20 @@ public class UYouTubeMainController implements Initializable {
                 int total = 100;
                 updateMessage("10 percents");
                 updateProgress(20, 100);
-                Map<String, Video> videos = Context.getYouTubeService().getMyUpload();
+                final Channel channel = Context.getYouTubeService().getMyChannel();
+                final Map<String, Video> videos = Context.getYouTubeService().getMyUpload();
+
+                if(channel != null) {
+                    Platform.runLater(new Runnable(){
+                        @Override
+                        public void run() {
+                            lbChannelIdValue.setText(channel.getId());
+                            if(channel.getSnippet() != null)
+                                lbChannelNameValue.setText(channel.getSnippet().getTitle());
+                            lbChannelVideoValue.setText(String.valueOf(videos.size()));
+                        }
+                    });
+                }
 
                 updateMessage("80 percents");
                 updateProgress(80, 100);

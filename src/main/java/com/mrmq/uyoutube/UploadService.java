@@ -25,7 +25,7 @@ public class UploadService extends Service {
                     logger.info("start upload video: {}", video);
                     Result<Video> result = UploadVideo.upload(youtube, video.getSnippet().getTitle(),
                             video.getSnippet().getDescription(),
-                            FileHelper.createVideoUploadFile(Config.getDownloadPath() + video.getSnippet().getChannelId(), video.getId()),
+                            FileHelper.createVideoUploadFile(Config.getInstance().getDownloadPath() + video.getSnippet().getChannelId(), video.getId()),
                             video.getSnippet().getTags());
 
                     if(result.getErrorCode().equals(ErrorCode.SUCCESS)) {

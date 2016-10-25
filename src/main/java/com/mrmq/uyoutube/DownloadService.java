@@ -175,9 +175,9 @@ public class DownloadService extends Service {
     }
 
     public void downloadVideo(Video video) {
-        String url = Config.getYoutubeWatchUrl() + video.getId();
+        String url = Config.getInstance().getYoutubeWatchUrl() + video.getId();
         String targetName = video.getId();
-        String destPath = Config.getDownloadPath() + video.getSnippet().getChannelId() + File.separator;
+        String destPath = Config.getInstance().getDownloadPath() + video.getSnippet().getChannelId() + File.separator;
 
         if(!validateVideo(targetName, destPath)) {
             logger.warn("Video exist: no need download again: {}", FileHelper.createVideoFile(destPath, targetName));
@@ -207,7 +207,7 @@ public class DownloadService extends Service {
 
             // create proper videoinfo to keep specific video information
             VideoInfo videoinfo = user.info(web);
-            videoinfo.setId(url.replace(Config.getYoutubeWatchUrl(), ""));
+            videoinfo.setId(url.replace(Config.getInstance().getYoutubeWatchUrl(), ""));
 
             File destDir = new File(destPath);
             VGet v = new VGet(videoinfo, destDir);
@@ -234,7 +234,7 @@ public class DownloadService extends Service {
             v.download(user, stop, notify);
 
             //Save to ini file
-            VideoDirectory channelDir = new VideoDirectory(Config.getDownloadPath() + video.getSnippet().getChannelId());
+            VideoDirectory channelDir = new VideoDirectory(Config.getInstance().getDownloadPath() + video.getSnippet().getChannelId());
             channelDir.addVideo(video);
         } catch (DownloadInterruptedError e) {
             throw e;

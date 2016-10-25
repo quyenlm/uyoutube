@@ -53,7 +53,7 @@ public class Context {
     public static VideoDirectory getVideosDir(String folderName) {
         VideoDirectory channelDir = Context.getBeans(folderName);
         if(channelDir == null)
-            channelDir = setBeans(folderName, new VideoDirectory(Config.getDownloadPath() + folderName));
+            channelDir = setBeans(folderName, new VideoDirectory(Config.getInstance().getDownloadPath() + folderName));
         return channelDir;
     }
 

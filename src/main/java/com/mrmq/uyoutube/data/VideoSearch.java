@@ -58,7 +58,7 @@ public class VideoSearch extends Task {
             YouTube youtube = new YouTube.Builder(Auth.HTTP_TRANSPORT, Auth.JSON_FACTORY, new HttpRequestInitializer() {
                 public void initialize(HttpRequest request) throws IOException {
                 }
-            }).setApplicationName(Config.getAppName()).build();
+            }).setApplicationName(Config.getInstance().getAppName()).build();
 
             // Define the API request for retrieving search results.
             YouTube.Search.List search = youtube.search().list("id,snippet");

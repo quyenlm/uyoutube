@@ -1,10 +1,8 @@
 package com.mrmq.uyoutube.config;
 
 
-import com.mrmq.uyoutube.YouTubeService;
 import com.mrmq.uyoutube.beans.ScreenSetting;
 import com.mrmq.uyoutube.helper.FileHelper;
-import org.springframework.context.annotation.*;
 
 import java.io.File;
 import java.util.Map;
@@ -14,18 +12,34 @@ public class Config {
     public static Map<String, ScreenSetting> screenSetting = new ConcurrentHashMap<String, ScreenSetting>();
     public static Map<String, String> messages = new ConcurrentHashMap<String, String>();
 
-    private static final String youtubeWatchUrl = "https://www.youtube.com/watch?v=";
-    private static final String appName = "uYouTube";
-    private static String apiKey = "AIzaSyB46r92ADOWDL3CIFdcMaB8auZ3_2iEmK4";
-    private static String homePath = ".";
-    private static String downloadPath = "./download/videos/";
+    private String youtubeWatchUrl = "https://www.youtube.com/watch?v=";
+    private String appName = "uYouTube";
+    private String apiKey = "AIzaSyB46r92ADOWDL3CIFdcMaB8auZ3_2iEmK4";
+    private String homePath = ".";
+    private String downloadPath = "./download/videos/";
+
+    private String oldTitleReplace;
+    private String newTitleReplace;
+    private String oldDescReplace;
+    private String newDescReplace;
+    private String descAppend;
+
+    private static Config instance;
 
     static {
         screenSetting.put(ScreenSetting.SCREEN_MAIN, new ScreenSetting(1024, 768));
         screenSetting.put(ScreenSetting.SCREEN_LOGIN, new ScreenSetting(300, 275));
     }
 
-    public static void init(){
+    public static void setInstance(Config config) {
+        Config.instance = config;
+    }
+
+    public static Config getInstance() {
+        return Config.instance;
+    }
+
+    public void init(){
         try {
             File homeDir = new File(homePath);
             if(!homeDir.exists())
@@ -47,35 +61,87 @@ public class Config {
         return screenSetting;
     }
 
-    public static String getAppName() {
+    public String getAppName() {
         return appName;
     }
 
-    public static String getApiKey() {
-        return apiKey;
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 
-    public static String getDownloadPath() {
+    public String getDownloadPath() {
         return downloadPath;
     }
 
-    public static void setDownloadPath(String downloadPath) {
-        Config.downloadPath = downloadPath;
+    public void setDownloadPath(String downloadPath) {
+        this.downloadPath = downloadPath;
     }
 
-    public static String getHomePath() {
+    public String getHomePath() {
         return homePath;
     }
 
-    public static void setHomePath(String homePath) {
-        Config.homePath = homePath;
+    public void setHomePath(String homePath) {
+        this.homePath = homePath;
     }
 
-    public static String getYoutubeWatchUrl() {
+    public String getVideoType() {
+        return ".mp4";
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public void setYoutubeWatchUrl(String youtubeWatchUrl) {
+        this.youtubeWatchUrl = youtubeWatchUrl;
+    }
+
+    public String getYoutubeWatchUrl() {
         return youtubeWatchUrl;
     }
 
-    public static String getVideoType() {
-        return ".mp4";
+    public String getOldTitleReplace() {
+        return oldTitleReplace;
+    }
+
+    public void setOldTitleReplace(String oldTitleReplace) {
+        this.oldTitleReplace = oldTitleReplace;
+    }
+
+    public String getNewTitleReplace() {
+        return newTitleReplace;
+    }
+
+    public void setNewTitleReplace(String newTitleReplace) {
+        this.newTitleReplace = newTitleReplace;
+    }
+
+    public String getOldDescReplace() {
+        return oldDescReplace;
+    }
+
+    public void setOldDescReplace(String oldDescReplace) {
+        this.oldDescReplace = oldDescReplace;
+    }
+
+    public String getNewDescReplace() {
+        return newDescReplace;
+    }
+
+    public void setNewDescReplace(String newDescReplace) {
+        this.newDescReplace = newDescReplace;
+    }
+
+    public String getDescAppend() {
+        return descAppend;
+    }
+
+    public void setDescAppend(String descAppend) {
+        this.descAppend = descAppend;
     }
 }

@@ -47,34 +47,40 @@
 
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
-<GridPane alignment="center" hgap="10" maxHeight="Infinity" maxWidth="Infinity" styleClass="root" vgap="5" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.mrmq.uyoutube.windows.UYouTubeMainController">
+<GridPane alignment="center" hgap="10" styleClass="root" vgap="5" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="com.mrmq.uyoutube.windows.UYouTubeMainController" >
     <stylesheets>
         <URL value="@Login.css" />
     </stylesheets>
 
     <padding><Insets bottom="10" left="25" right="25" top="25" /></padding>
 
-    <Text id="welcome-text" text="" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+    <Text id="welcome-text" text="My Channel" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
 
     <Label id="lbChannelId" text="Channel Id:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    <Label id="lbChannelIdValue" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+    <Label fx:id="lbChannelIdValue" GridPane.columnIndex="2" GridPane.rowIndex="2" />
 
     <Label id="lbChannelName" text="Channel Name:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
     <Label fx:id="lbChannelNameValue" GridPane.columnIndex="2" GridPane.rowIndex="3" />
 
     <Label id="lbChannelVideo" text="Videos:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-    <Label id="lbChannelVideoValue" text="" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+    <Label fx:id="lbChannelVideoValue" text="" GridPane.columnIndex="2" GridPane.rowIndex="4" />
 
     <HBox spacing="10" alignment="bottom_right"
           GridPane.columnIndex="2" GridPane.rowIndex="5">
-        <Button fx:id="btnShowReup" text="Re-up videos" disable="false"
+        <Button fx:id="btnShowReup" text="Reup videos" disable="false"
+                onAction="#handleSubmitButtonAction" />
+    </HBox>
+
+    <HBox spacing="10" alignment="bottom_right"
+          GridPane.columnIndex="2" GridPane.rowIndex="6">
+        <Button fx:id="btnSettings" text="Setting" disable="false"
                 onAction="#handleSubmitButtonAction" />
     </HBox>
 
     <Text fx:id="actiontarget" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
-    <ListView fx:id="lvVideos" GridPane.fillHeight="2" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="4" />
+    <ListView fx:id="lvVideos" GridPane.fillHeight="2" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="6" />
 
     <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.columnSpan="4" >
         <children>

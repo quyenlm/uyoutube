@@ -45,6 +45,15 @@ public class MyUploads {
         return channelResult.getItems();
     }
 
+    public static List<Channel> getMyChannelDetail(YouTube youtube) throws IOException {
+        YouTube.Channels.List channelRequest = youtube.channels().list("id,contentDetails,snippet");
+        channelRequest.setMine(true);
+        channelRequest.setFields("items/contentDetails,nextPageToken,pageInfo");
+        ChannelListResponse channelResult = channelRequest.execute();
+
+        return channelResult.getItems();
+    }
+
     private static List<PlaylistItem> getPlaylistItems(YouTube youtube, Channel channel) throws IOException {
         String uploadPlaylistId = channel.getContentDetails().getRelatedPlaylists().getUploads();
 

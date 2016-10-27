@@ -9,14 +9,20 @@
         </property>
     </bean>
 
-    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="staticMethod" value="com.mrmq.uyoutube.config.Config.setDownloadPath"/>
-        <property name="arguments" value="${youtube.download_path}" />
-    </bean>
+    <bean id="config" class="com.mrmq.uyoutube.config.Config">
+        <property name="oldTitleReplace" value="${youtube.oldTitleReplace}" />
+        <property name="newTitleReplace" value="${youtube.newTitleReplace}" />
+        <property name="oldDescReplace" value="${youtube.oldDescReplace}" />
+        <property name="newDescReplace" value="${youtube.newDescReplace}" />
+        <property name="descAppend" value="${youtube.descAppend}" />
 
-    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="staticMethod" value="com.mrmq.uyoutube.config.Config.setHomePath"/>
-        <property name="arguments" value="${youtube.home_path}" />
+        <property name="homePath" value="${youtube.home_path}" />
+        <property name="downloadPath" value="${youtube.download_path}" />
+
+        <property name="apiKey" value="${youtube.apikey}" />
+        <property name="appName" value="${youtube.appName}" />
+
+        <property name="instance" ref="config" />
     </bean>
 
     <!-- A simple bean definition -->

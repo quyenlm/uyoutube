@@ -23,9 +23,10 @@ public class UploadService extends Service {
                 Video video = queues.poll(1000, TimeUnit.MILLISECONDS);
                 if(video != null) {
                     logger.info("start upload video: {}", video);
-                    Result<Video> result = UploadVideo.upload(youtube, video.getSnippet().getTitle(), video.getSnippet().getDescription(),
-                            FileHelper.createVideoFile(Config.getDownloadPath() + video.getSnippet().getChannelId(),
-                                    video.getId()), video.getSnippet().getTags());
+                    Result<Video> result = UploadVideo.upload(youtube, video.getSnippet().getTitle(),
+                            video.getSnippet().getDescription(),
+                            FileHelper.createVideoUploadFile(Config.getInstance().getDownloadPath() + video.getSnippet().getChannelId(), video.getId()),
+                            video.getSnippet().getTags());
 
                     if(result.getErrorCode().equals(ErrorCode.SUCCESS)) {
                         //Save upload trace to ini file

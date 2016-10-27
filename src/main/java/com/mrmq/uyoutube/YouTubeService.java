@@ -258,6 +258,15 @@ public class YouTubeService {
 
     }
 
+    public Channel getMyChannel() throws IOException {
+        Map<String, Video> channelVideos = com.google.common.collect.Maps.newConcurrentMap();
+        List<Channel> lstChannel = MyUploads.getMyChannelDetail(getYouTube());
+        if (lstChannel != null && lstChannel.size() > 0)
+            return lstChannel.get(0);
+
+        return null;
+    }
+
     public Map<String, Video> getMyUpload() throws IOException {
         Map<String, Video> channelVideos = com.google.common.collect.Maps.newConcurrentMap();
         List<Channel> lstChannel = MyUploads.getMyChannels(getYouTube());
@@ -314,7 +323,7 @@ public class YouTubeService {
             int downloaded = 0;
 
             //load video in channel from youtube
-            List<Video> search = VideoSearch.search(null, channelId, Config.getApiKey());
+            List<Video> search = VideoSearch.search(null, channelId, Config.getInstance().getApiKey());
             if(search != null) {
                 total = search.size();
 

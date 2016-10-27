@@ -18,7 +18,7 @@ public class UYouTube extends Application {
     public static void main(String[] args) {
         String[] xmlConfigs = new String[]{"classpath:spring-uyoutube-context.xml"};
         ApplicationContext ctx = new ClassPathXmlApplicationContext(xmlConfigs);
-        Config.init();
+        Config.getInstance().init();
         Application.launch(UYouTube.class, args);
     }
 
@@ -30,7 +30,7 @@ public class UYouTube extends Application {
     private void showLogin(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../../../../fxml/fxml_login.fxml"));
 
-        stage.setTitle(Config.getApiKey());
+        stage.setTitle(Config.getInstance().getApiKey());
         ScreenSetting setting = Config.getScreenSetting().get(ScreenSetting.SCREEN_LOGIN);
         stage.setScene(new Scene(root, setting.getWidth(), setting.getHeight()));
         stage.show();

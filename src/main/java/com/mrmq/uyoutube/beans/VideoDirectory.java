@@ -5,6 +5,7 @@ import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.helper.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,7 +110,7 @@ public class VideoDirectory extends File {
             return;
 
         for(File file : listFiles())
-            currentFiles.put(file.getName(), file);
+            currentFiles.put(file.getName().replace(Config.getVideoType(), ""), file);
 
         Iterator<String> itKey = videos.keySet().iterator();
         while (itKey.hasNext()) {

@@ -110,7 +110,7 @@ public class VideoDirectory extends File {
             return;
 
         for(File file : listFiles())
-            currentFiles.put(file.getName().replace(Config.getVideoType(), ""), file);
+            currentFiles.put(FileHelper.getFilePrefix(file.getName()), file);
 
         Iterator<String> itKey = videos.keySet().iterator();
         while (itKey.hasNext()) {

@@ -1,10 +1,12 @@
 package com.mrmq.uyoutube.config;
 
 
+import com.google.common.collect.Lists;
 import com.mrmq.uyoutube.beans.ScreenSetting;
 import com.mrmq.uyoutube.helper.FileHelper;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -85,8 +87,8 @@ public class Config {
         this.homePath = homePath;
     }
 
-    public String getVideoType() {
-        return ".mp4";
+    public List<String> getVideoType() {
+        return Lists.asList(".mp4", new String[]{".webm"});
     }
 
     public String getApiKey() {

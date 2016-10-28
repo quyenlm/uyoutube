@@ -30,8 +30,8 @@ public class FileHelper {
 
     public static String createVideoFile(String dirPath, String fileName) {
         if(dirPath.endsWith(File.separator))
-            return dirPath + fileName + Config.getInstance().getVideoType();
-        else return dirPath + File.separator + fileName + Config.getInstance().getVideoType();
+            return dirPath + fileName;
+        else return dirPath + File.separator + fileName;
     }
 
     public static String createVideoUploadFile(String dirPath, String videoId) {
@@ -44,6 +44,16 @@ public class FileHelper {
         if(dirPath.endsWith(File.separator))
             return dirPath + channelId + File.separator + fileName + Config.getInstance().getVideoType();
         else return dirPath + File.separator + channelId + File.separator + fileName + Config.getInstance().getVideoType();
+    }
+
+    public static String getFilePrefix(String fileName){
+        for(String postfix : Config.getInstance().getVideoType()) {
+            if(fileName.contains(VIDEO_SUFFIX))
+                return fileName.replaceAll(VIDEO_SUFFIX, "").substring(0, fileName.lastIndexOf("."));
+            if (fileName.endsWith(postfix))
+                return fileName.substring(0, fileName.lastIndexOf("."));
+        }
+        return fileName;
     }
 
     public static String toCsv(Video video) {

@@ -164,12 +164,12 @@ public class DownloadService extends Service {
     }
 
     private boolean validateVideo(String targetName, String destPath) {
-        File video = new File(FileHelper.createVideoFile(destPath, targetName));
-        if(video.exists()) {
-            double size =  video.length()/1024/1024;
-            if(size > 20)
+        for(String fileExtend : Config.getInstance().getVideoType()) {
+            File video = new File(FileHelper.createVideoFile(destPath, targetName + fileExtend));
+            if (video.exists()) {
+                logger.warn("Video exist: no need download again: {}", video.getAbsoluteFile());
                 return false;
-            video.delete();
+            }
         }
         return true;
     }
@@ -180,7 +180,6 @@ public class DownloadService extends Service {
         String destPath = Config.getInstance().getDownloadPath() + video.getSnippet().getChannelId() + File.separator;
 
         if(!validateVideo(targetName, destPath)) {
-            logger.warn("Video exist: no need download again: {}", FileHelper.createVideoFile(destPath, targetName));
             return;
         }
 

@@ -378,4 +378,8 @@ public class YouTubeService {
     public void setChannel(Channel channel) {
         this.channel = channel;
     }
+
+    public Map<String, Video> getVideos() {
+        return videos;
+    }
 }

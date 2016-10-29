@@ -46,4 +46,8 @@ public class Service extends Thread {
     public void setYouTubeService(YouTubeService youTubeService) {
         this.youTubeService = youTubeService;
     }
+
+    public interface Listener<T> {
+        public void onEvent(T event);
+    }
 }

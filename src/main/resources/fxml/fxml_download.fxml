@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<GridPane alignment="center" hgap="10" prefHeight="485.0" prefWidth="779.0" styleClass="root" vgap="10" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mrmq.uyoutube.windows.UYouTubeDownloadController">
+<GridPane alignment="TOP_CENTER" hgap="10" styleClass="root" vgap="10" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mrmq.uyoutube.windows.UYouTubeDownloadController">
     <padding><Insets bottom="10" left="25" right="25" top="25" /></padding>
 
     <stylesheets>
@@ -28,38 +28,48 @@
         <ColumnConstraints percentWidth="25" />
     </columnConstraints>
 
-    <Text id="welcome-text" text="Download" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+    <Text id="welcome-text" text="" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
 
-    <Label id="lbChannelId" text="Channel Id:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-    <TextField fx:id="txtChannelId" text="UCph-WGR0oCbJDpaWmNHb5zg" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    <Label id="lbChannelId" text="Channel Id:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+    <TextField fx:id="txtChannelId" text="UCph-WGR0oCbJDpaWmNHb5zg" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="2">
+    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="1">
         <Button fx:id="btnRefresh" onAction="#handleButtonAction" text="Refresh" />
     </HBox>
 
-    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="3">
+    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="2">
         <Button fx:id="btnDownloadVideo" disable="true" onAction="#handleButtonAction" text="Download" />
     </HBox>
 
-    <Label id="lbChannelName" text="Channel Name:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-    <Label fx:id="lbChannelNameValue" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+    <Label id="lbChannelName" text="Channel Name:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+    <Label fx:id="lbChannelNameValue" GridPane.columnIndex="2" GridPane.rowIndex="2" />
 
-    <Label id="lbChannelVideo" text="Videos:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-    <Label fx:id="lbChannelVideoValue" text="" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+    <Label id="lbChannelVideo" text="Videos:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+    <Label fx:id="lbChannelVideoValue" text="" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-    <Text fx:id="txtMessage" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+    <Text fx:id="txtMessage" GridPane.columnIndex="0" GridPane.rowIndex="4" />
 
-    <Label fx:id="lbNewVideos" text="News videos" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-    <ListView fx:id="lvNewVideos" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.fillHeight="2" GridPane.rowIndex="7" />
+    <Label fx:id="lbNewVideos" text="News videos" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+    <ListView fx:id="lvNewVideos" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.fillHeight="2" GridPane.rowIndex="6" />
 
-    <Label fx:id="lbDownloaded" text="Downloaded videos" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-    <ListView fx:id="lvDownloaded" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.fillHeight="2" GridPane.rowIndex="7" />
-    <ProgressBar fx:id="progressBarReup" prefHeight="23.0" prefWidth="362.0" progress="0.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+    <Label fx:id="lbDownloaded" text="Downloaded videos" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+    <ListView fx:id="lvDownloaded" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.fillHeight="2" GridPane.rowIndex="6" />
+    <ProgressBar fx:id="progressBarReup" prefHeight="23.0" prefWidth="362.0" progress="0.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="7" />
 
-    <AnchorPane GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="8">
+    <AnchorPane GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="7">
         <children>
-            <ProgressBar fx:id="progressBarDownload" prefHeight="23.0" prefWidth="358.0" progress="0.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+            <ProgressBar fx:id="progressBarDownload" prefHeight="23.0" prefWidth="304.0" progress="0.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7" />
         </children>
     </AnchorPane>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
 
 </GridPane>

@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FileHelper {
     private static final Logger logger = LoggerFactory.getLogger(FileHelper.class);
@@ -104,5 +106,28 @@ public class FileHelper {
         }
 
         return strB.toString();
+    }
+
+    public static void mergedFile(String videoPath) {
+        File files = new File(videoPath);
+
+        Map<String, String> cache = new HashMap<String, String>();
+        Map<String, String> cache2 = new HashMap<String, String>();
+
+        for(File file : files.listFiles()) {
+            if(file.getName().endsWith(".mp4"))
+                cache.put(file.getName().replace(".mp4", ""), "");
+        }
+
+        for(File file : files.listFiles()) {
+            if(file.getName().endsWith(".webm")) {
+                cache2.put(file.getName().replace(".webm", ""), "");
+            }
+        }
+
+        for(String mp4 : cache.keySet()) {
+            if(cache2.get(mp4) != null)
+                System.out.println(String.format("ffmpeg -i %s.mp4 -i %s.webm -c:a aac -c:v libx264 -strict -2 -c:s copy %s%s.mp4", mp4, mp4, mp4, VIDEO_SUFFIX));
+        }
     }
 }

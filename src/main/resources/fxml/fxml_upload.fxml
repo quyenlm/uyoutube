@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<GridPane alignment="center" hgap="10" prefHeight="485.0" prefWidth="779.0" styleClass="root" vgap="10" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mrmq.uyoutube.windows.UYouTubeUploadController">
+<GridPane alignment="TOP_CENTER" hgap="10" styleClass="root" vgap="10" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mrmq.uyoutube.windows.UYouTubeUploadController">
     <padding><Insets bottom="10" left="25" right="25" top="25" /></padding>
 
     <columnConstraints>
@@ -27,32 +27,32 @@
         <URL value="@Login.css" />
     </stylesheets>
 
-    <Text id="welcome-text" text="Upload" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+    <Text id="welcome-text" text="" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
 
-    <Label id="lbChannelId" text="Channel Id:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-    <TextField fx:id="txtChannelId" text="UCph-WGR0oCbJDpaWmNHb5zg" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    <Label id="lbChannelId" text="Channel Id:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+    <TextField fx:id="txtChannelId" text="UCph-WGR0oCbJDpaWmNHb5zg" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="2">
+    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="1">
         <Button fx:id="btnRefresh" onAction="#handleButtonAction" text="Refresh" />
     </HBox>
 
-    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="3">
-        <Button fx:id="btnDownloadVideo" disable="true" onAction="#handleButtonAction" text="Upload" />
+    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="2">
+        <Button fx:id="btnUploadVideo" disable="true" onAction="#handleButtonAction" text="Upload" />
     </HBox>
 
-    <Label id="lbChannelName" text="Channel Name:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-    <Label fx:id="lbChannelNameValue" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <Label id="lbChannelName" text="Channel Name:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+    <Label fx:id="lbChannelNameValue" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-    <Label id="lbChannelVideo" text="Videos:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-    <Label fx:id="lbChannelVideoValue" text="" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+    <Label id="lbChannelVideo" text="Videos:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+    <Label fx:id="lbChannelVideoValue" text="" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-    <Text fx:id="txtMessage" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+    <Text fx:id="txtMessage" GridPane.columnIndex="0" GridPane.rowIndex="5" />
 
-    <Label fx:id="lbNewVideos" text="News videos" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-    <ListView fx:id="lvNewVideos" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.fillHeight="2" GridPane.rowIndex="7" />
+    <Label fx:id="lbNewVideos" text="News videos" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+    <ListView fx:id="lvNewVideos" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.fillHeight="2" GridPane.rowIndex="6" />
 
-    <Label fx:id="lbDownloaded" text="Downloaded videos" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-    <ListView fx:id="lvDownloaded" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.fillHeight="2" GridPane.rowIndex="7" />
-    <ProgressBar fx:id="progressBarDownload" prefHeight="23.0" prefWidth="362.0" progress="0.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+    <Label fx:id="lbUploaded" text="Uploaded videos" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+    <ListView fx:id="lvUploaded" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.fillHeight="2" GridPane.rowIndex="6" />
+    <ProgressBar fx:id="progressBarUpload" prefHeight="23.0" prefWidth="362.0" progress="0.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="7" />
 
 </GridPane>

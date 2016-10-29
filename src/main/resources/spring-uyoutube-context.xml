@@ -25,10 +25,4 @@
         <property name="instance" ref="config" />
     </bean>
 
-    <!-- A simple bean definition -->
-    <bean id="youTubeService" class="com.mrmq.uyoutube.YouTubeService">
-        <property name="channelEmail" value="${youtube.channel.email}" />
-    </bean>
-
-
 </beans>

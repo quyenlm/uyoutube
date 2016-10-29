@@ -43,7 +43,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<GridPane alignment="center" hgap="10" styleClass="root" vgap="5" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mrmq.uyoutube.windows.UYouTubeMyChannelController">
+<GridPane alignment="TOP_CENTER" hgap="10" styleClass="root" vgap="10" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mrmq.uyoutube.windows.UYouTubeMyChannelController">
     <padding><Insets bottom="10" left="25" right="25" top="25" /></padding>
 
     <stylesheets>
@@ -55,10 +55,10 @@
         <ColumnConstraints percentWidth="50" />
     </columnConstraints>
 
-    <Text id="welcome-text" text="My Channel" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+    <Text id="welcome-text" text="" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
 
     <Label id="lbChannelId" text="Channel Id:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-    <Label fx:id="lbChannelIdValue" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <Label fx:id="lbChannelIdValue"  GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
     <Label id="lbChannelName" text="Channel Name:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
     <Label fx:id="lbChannelNameValue" GridPane.columnIndex="1" GridPane.rowIndex="2" />

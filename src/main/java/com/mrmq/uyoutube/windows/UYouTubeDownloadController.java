@@ -22,14 +22,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class UYouTubeReupController {
+public class UYouTubeDownloadController {
     private static final Logger logger = LoggerFactory.getLogger(AppStartup.class);
 
     @FXML private Text txtMessage;
     @FXML private TextField txtChannelId;
     @FXML private Label lbChannelVideoValue;
     @FXML private Button btnDownloadVideo;
-    @FXML private Button btnReupVideo;
     @FXML private Button btnRefresh;
 
     @FXML private Label lbNewVideos;
@@ -48,8 +47,6 @@ public class UYouTubeReupController {
                 handleRefreshButtonAction(event);
             } else if(event.getSource() == btnDownloadVideo) {
                 handleDownloadButtonAction(event);
-            } else if(event.getSource() == btnReupVideo) {
-                handleReupButtonAction(event);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -171,6 +168,5 @@ public class UYouTubeReupController {
     private void disableControls(boolean disable){
         btnRefresh.setDisable(disable);
         btnDownloadVideo.setDisable(disable);
-        btnReupVideo.setDisable(disable);
     }
 }

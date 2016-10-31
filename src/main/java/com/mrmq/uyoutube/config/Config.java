@@ -6,6 +6,7 @@ import com.mrmq.uyoutube.beans.ScreenSetting;
 import com.mrmq.uyoutube.helper.FileHelper;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,7 +26,7 @@ public class Config {
     private String oldDescReplace;
     private String newDescReplace;
     private String descAppend;
-
+    private List<String> defaultTags = Lists.asList("Larva TUBA", new String[]{"Larva ","TUBA","funny larva","cartoon","lovely cartoon","funny cartoon","best cartoon","best funny"});
     private static Config instance;
 
     static {
@@ -145,5 +146,13 @@ public class Config {
 
     public void setDescAppend(String descAppend) {
         this.descAppend = descAppend;
+    }
+
+    public List<String> getDefaultTags() {
+        return defaultTags;
+    }
+
+    public void setDefaultTags(List<String> defaultTags) {
+        this.defaultTags = defaultTags;
     }
 }

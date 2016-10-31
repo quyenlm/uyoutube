@@ -28,7 +28,7 @@ public class UploadService extends Service {
                     Result<Video> result = UploadVideo.upload(youtube, uploadVideo.getSnippet().getTitle(),
                             uploadVideo.getSnippet().getDescription(),
                             FileHelper.createVideoUploadFile(Config.getInstance().getDownloadPath() + video.getSnippet().getChannelId(), video.getId()),
-                            video.getSnippet().getTags());
+                            Config.getInstance().getDefaultTags());
 
                     if(result.getErrorCode().equals(ErrorCode.SUCCESS)) {
                         //Save upload trace to ini file

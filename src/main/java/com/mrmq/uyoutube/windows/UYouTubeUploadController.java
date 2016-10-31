@@ -61,7 +61,8 @@ public class UYouTubeUploadController {
         newVideos.clear();
         txtMessage.setText("");
         lbChannelVideoValue.setText("");
-        disableControls(true);
+        btnRefresh.setDisable(true);
+        btnUploadVideo.setDisable(true);
 
         String channelId = txtChannelId.getText().trim();
         if(channelId.length() == 0) {
@@ -79,26 +80,23 @@ public class UYouTubeUploadController {
             }
         }
 
-        if(newVideos.size() > 0)
-            Platform.runLater(new Runnable(){
-                @Override
-                public void run() {
-                    for (Video video: newVideos.values()) {
-                        lvNewVideos.getItems().add(video.getSnippet().getTitle());
-                    }
-                    for (Video video : downloadedVideos.values()) {
-                        if(uploadedVideos.containsKey(video.getId()))
-                            lvUploaded.getItems().add(video.getSnippet().getTitle());
-                    }
+        if(newVideos.size() > 0) {
+            for (Video video: newVideos.values()) {
+                lvNewVideos.getItems().add(video.getSnippet().getTitle());
+            }
+            for (Video video : downloadedVideos.values()) {
+                if(uploadedVideos.containsKey(video.getId()))
+                    lvUploaded.getItems().add(video.getSnippet().getTitle());
+            }
 
-                    lbNewVideos.setText("New videos: " + newVideos.size());
-                    lbNewVideos.setText("New videos: " + newVideos.size());
-                    if(newVideos.size() > 0)
-                        btnUploadVideo.setDisable(false);
-                    else
-                        btnUploadVideo.setDisable(true);
-                }
-            });
+            lbNewVideos.setText("New videos: " + newVideos.size());
+            lbUploaded.setText("Uploaded videos: " + lvUploaded.getItems().size());
+            btnRefresh.setDisable(false);
+            if(newVideos.size() > 0)
+                btnUploadVideo.setDisable(false);
+            else
+                btnUploadVideo.setDisable(true);
+        }
     }
 
     private void handleUploadButtonAction(ActionEvent event) {
@@ -149,7 +147,6 @@ public class UYouTubeUploadController {
     }
 
     private void disableControls(boolean disable){
-        btnRefresh.setDisable(disable);
-        btnUploadVideo.setDisable(disable);
+
     }
 }

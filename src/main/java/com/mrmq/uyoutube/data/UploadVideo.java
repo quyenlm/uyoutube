@@ -121,7 +121,7 @@ public class UploadVideo {
                             break;
                         case MEDIA_IN_PROGRESS:
                             logger.info("Upload in progress");
-                            logger.info("Upload BytesUploaded: " + uploader.getNumBytesUploaded());
+                            logger.info("Upload {} Kbs", (uploader.getNumBytesUploaded()/1024));
                             break;
                         case MEDIA_COMPLETE:
                             logger.info("Upload Completed!");

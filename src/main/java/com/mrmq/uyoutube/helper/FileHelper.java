@@ -121,7 +121,7 @@ public class FileHelper {
         Preconditions.checkNotNull(Config.getInstance().getNewDescReplace(), "NewDescReplace can not be null");
 
         String title;
-        if(StringUtils.isNoneEmpty(Config.getInstance().getOldTitleReplace()))
+        if(StringUtils.isNoneEmpty(Config.getInstance().getOldTitleReplace()) && origin.getSnippet().containsKey(Config.getInstance().getOldTitleReplace()))
             title = origin.getSnippet().getTitle().replace(Config.getInstance().getOldTitleReplace(), Config.getInstance().getNewTitleReplace());
         else if(StringUtils.isNoneEmpty(Config.getInstance().getNewTitleReplace()))
             title = Config.getInstance().getNewTitleReplace() + " " + origin.getSnippet().getTitle();
@@ -132,7 +132,7 @@ public class FileHelper {
         //Description
 
         String desc;
-        if(StringUtils.isNoneEmpty(Config.getInstance().getOldDescReplace()))
+        if(StringUtils.isNoneEmpty(Config.getInstance().getOldDescReplace()) && origin.getSnippet().getDescription().contains(Config.getInstance().getOldDescReplace()))
             desc = origin.getSnippet().getTitle().replace(Config.getInstance().getOldDescReplace(), Config.getInstance().getNewDescReplace());
         else if(StringUtils.isNoneEmpty(Config.getInstance().getNewDescReplace()))
             desc = Config.getInstance().getNewDescReplace() + " " + origin.getSnippet().getDescription();

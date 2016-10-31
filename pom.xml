@@ -15,7 +15,7 @@
     </parent>
 
     <properties>
-        <project.youtube.version>v3-rev178-1.22.0</project.youtube.version>
+        <project.youtube.version>v3-rev179-1.22.0</project.youtube.version>
         <project.youtube.analytics.version>v1-rev24-1.17.0-rc</project.youtube.analytics.version>
         <project.http.version>1.18.0-rc</project.http.version>
         <project.oauth.version>1.18.0-rc</project.oauth.version>

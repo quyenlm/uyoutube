@@ -1,9 +1,12 @@
 package com.mrmq.uyoutube.helper;
 
+import com.google.api.client.repackaged.com.google.common.base.Preconditions;
 import com.google.api.services.youtube.model.Video;
 import com.mrmq.uyoutube.config.Config;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -14,7 +17,7 @@ public class FileHelper {
     private static final Logger logger = LoggerFactory.getLogger(FileHelper.class);
     public static final String CSV_SPLIT = "<>";
     public static final String TAG_SPLIT = "><";
-    public static final String VIDEO_SUFFIX = "_merged";
+    public static final String VIDEO_SUFFIX = "_Merged";
 
     public static String makerChannelDataPath() {
         return Config.getInstance().getHomePath() + "data";
@@ -38,8 +41,8 @@ public class FileHelper {
 
     public static String createVideoUploadFile(String dirPath, String videoId) {
         if(dirPath.endsWith(File.separator))
-            return dirPath + videoId + VIDEO_SUFFIX + Config.getInstance().getVideoType();
-        else return dirPath + File.separator + videoId + Config.getInstance().getVideoType();
+            return dirPath + videoId + VIDEO_SUFFIX + ".mp4";
+        else return dirPath + File.separator + videoId + VIDEO_SUFFIX + ".mp4";
     }
 
     public static String createVideoFile(String dirPath, String channelId, String fileName) {
@@ -51,7 +54,7 @@ public class FileHelper {
     public static String getFilePrefix(String fileName){
         for(String postfix : Config.getInstance().getVideoType()) {
             if(fileName.contains(VIDEO_SUFFIX))
-                return fileName.replaceAll(VIDEO_SUFFIX, "").substring(0, fileName.lastIndexOf("."));
+                return fileName.replaceAll(VIDEO_SUFFIX, "").substring(0, fileName.lastIndexOf(VIDEO_SUFFIX));
             if (fileName.endsWith(postfix))
                 return fileName.substring(0, fileName.lastIndexOf("."));
         }
@@ -106,6 +109,40 @@ public class FileHelper {
         }
 
         return strB.toString();
+    }
+
+    public static Video makeUploadVideo(Video origin) {
+        Video video = new Video();
+        BeanUtils.copyProperties(origin, video);
+
+        Preconditions.checkNotNull(Config.getInstance().getOldTitleReplace(), "OldTitleReplace can not be null");
+        Preconditions.checkNotNull(Config.getInstance().getNewTitleReplace(), "NewTitleReplace can not be null");
+        Preconditions.checkNotNull(Config.getInstance().getOldDescReplace(), "OldDescReplace can not be null");
+        Preconditions.checkNotNull(Config.getInstance().getNewDescReplace(), "NewDescReplace can not be null");
+
+        String title;
+        if(StringUtils.isNoneEmpty(Config.getInstance().getOldTitleReplace()))
+            title = origin.getSnippet().getTitle().replace(Config.getInstance().getOldTitleReplace(), Config.getInstance().getNewTitleReplace());
+        else if(StringUtils.isNoneEmpty(Config.getInstance().getNewTitleReplace()))
+            title = Config.getInstance().getNewTitleReplace() + " " + origin.getSnippet().getTitle();
+        else
+            title = origin.getSnippet().getTitle();
+        video.getSnippet().setTitle(title);
+
+        //Description
+
+        String desc;
+        if(StringUtils.isNoneEmpty(Config.getInstance().getOldDescReplace()))
+            desc = origin.getSnippet().getTitle().replace(Config.getInstance().getOldDescReplace(), Config.getInstance().getNewDescReplace());
+        else if(StringUtils.isNoneEmpty(Config.getInstance().getNewDescReplace()))
+            desc = Config.getInstance().getNewDescReplace() + " " + origin.getSnippet().getDescription();
+        else
+            desc = origin.getSnippet().getDescription();
+        if(StringUtils.isNoneEmpty(Config.getInstance().getDescAppend()))
+            desc += Config.getInstance().getDescAppend();
+        video.getSnippet().setDescription(desc);
+
+        return video;
     }
 
     public static void mergedFile(String videoPath) {

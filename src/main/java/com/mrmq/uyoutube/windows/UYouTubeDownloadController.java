@@ -8,6 +8,7 @@ import com.mrmq.uyoutube.beans.VideoDirectory;
 import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.data.VideoSearch;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

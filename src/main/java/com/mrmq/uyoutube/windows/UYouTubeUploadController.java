@@ -4,6 +4,8 @@ import com.google.api.services.youtube.model.Video;
 import com.google.common.base.Function;
 import com.mrmq.uyoutube.AppStartup;
 import com.mrmq.uyoutube.Context;
+import com.mrmq.uyoutube.Service;
+import com.mrmq.uyoutube.beans.HandleEvent;
 import com.mrmq.uyoutube.beans.VideoDirectory;
 import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.data.VideoSearch;
@@ -37,7 +39,7 @@ public class UYouTubeUploadController {
     @FXML private Label lbUploaded;
     @FXML private ListView lvUploaded;
     @FXML private ProgressBar progressBarUpload;
-    private Task searchVideosWorker;
+    private Task uploadTask;
 
     private Map<String, Video> newVideos = new ConcurrentHashMap<String, Video>();
 
@@ -101,11 +103,49 @@ public class UYouTubeUploadController {
 
     private void handleUploadButtonAction(ActionEvent event) {
         try {
-            Map<String, Video> toDownload = newVideos;
-            Context.getYouTubeService().upload(toDownload);
+            if(!progressBarUpload.progressProperty().isBound()) {
+                progressBarUpload.setProgress(0);
+                uploadTask = createUploadWorker();
+                progressBarUpload.progressProperty().bind(uploadTask.progressProperty());
+                new Thread(uploadTask).start();
+            }
+
+            Map<String, Video> toUploads = newVideos;
+            if(toUploads != null && toUploads.size() > 0)
+                for (Video video: toUploads.values()) {
+                    Context.getUploadService().add(video);
+                }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+
+    private Task createUploadWorker() {
+        if(uploadTask == null)
+            uploadTask = new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    Context.getUploadService().addListener(new Service.Listener<HandleEvent>() {
+                        @Override
+                        public void onEvent(HandleEvent event) {
+                            updateProgress(event.getCompletedTask(), event.getTotalTask());
+//                            if(event.getCompletedTask() > 0 && event.getCompletedTask() == event.getTotalTask()) {
+//                                synchronized (uploadTask) {
+//                                    uploadTask.notify();
+//                                    uploadTask = null;
+//                                }
+//                            }
+                        }
+                    });
+                    synchronized (this) {
+                        this.wait();
+                    }
+                    return true;
+                }
+            };
+
+        return uploadTask;
     }
 
     private void disableControls(boolean disable){

@@ -3,6 +3,7 @@ package com.mrmq.uyoutube;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Video;
 import com.mrmq.uyoutube.beans.ErrorCode;
+import com.mrmq.uyoutube.beans.HandleEvent;
 import com.mrmq.uyoutube.beans.Result;
 import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.data.UploadVideo;
@@ -23,8 +24,9 @@ public class UploadService extends Service {
                 Video video = queues.poll(1000, TimeUnit.MILLISECONDS);
                 if(video != null) {
                     logger.info("start upload video: {}", video);
-                    Result<Video> result = UploadVideo.upload(youtube, video.getSnippet().getTitle(),
-                            video.getSnippet().getDescription(),
+                    Video uploadVideo = FileHelper.makeUploadVideo(video);
+                    Result<Video> result = UploadVideo.upload(youtube, uploadVideo.getSnippet().getTitle(),
+                            uploadVideo.getSnippet().getDescription(),
                             FileHelper.createVideoUploadFile(Config.getInstance().getDownloadPath() + video.getSnippet().getChannelId(), video.getId()),
                             video.getSnippet().getTags());
 
@@ -34,10 +36,20 @@ public class UploadService extends Service {
                             getYouTubeService().addVideoTrace(video.getId(), result.getValue());
                     }
 
+                    completedTask.incrementAndGet();
                     logger.info("end upload video: {}", video);
+                    onEvent(new HandleEvent(totalTask.get(), completedTask.get()));
+                    if(result.getErrorCode().equals(ErrorCode.SUCCESS))
+                        Thread.sleep(22000);
+                    if(totalTask.get() == completedTask.get()) {
+                        completedTask.set(0);
+                        totalTask.set(0);
+                    }
                 }
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
+                completedTask.incrementAndGet();
+                onEvent(new HandleEvent(totalTask.get(), completedTask.get()));
             }
         }
     }

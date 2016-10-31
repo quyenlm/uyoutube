@@ -121,7 +121,7 @@ public class UploadVideo {
                             break;
                         case MEDIA_IN_PROGRESS:
                             logger.info("Upload in progress");
-                            logger.info("Upload percentage: " + uploader.getProgress());
+                            logger.info("Upload BytesUploaded: " + uploader.getNumBytesUploaded());
                             break;
                         case MEDIA_COMPLETE:
                             logger.info("Upload Completed!");
@@ -136,7 +136,6 @@ public class UploadVideo {
 
             // Call the API and upload the video.
             Video returnedVideo = videoInsert.execute();
-
             // Print data about the newly inserted video from the API response.
             logger.info("\n================== Returned Video ==================\n");
             logger.info("  - Id: " + returnedVideo.getId());
@@ -144,7 +143,7 @@ public class UploadVideo {
             logger.info("  - Tags: " + returnedVideo.getSnippet().getTags());
             logger.info("  - Privacy Status: " + returnedVideo.getStatus().getPrivacyStatus());
             logger.info("  - Video Count: " + returnedVideo.getStatistics().getViewCount());
-
+            result.setValue(result);
             result.setErrorCode(ErrorCode.SUCCESS);
         } catch (GoogleJsonResponseException e) {
             result.setErrorCode(ErrorCode.FAIL);

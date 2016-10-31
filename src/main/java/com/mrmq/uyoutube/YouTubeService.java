@@ -213,8 +213,10 @@ public class YouTubeService {
         if(!Context.getDownloadService().isRunning)
             Context.getDownloadService().start();
 
-        if(Context.getUploadService() == null)
+        if(Context.getUploadService() == null) {
             Context.setUploadService(new UploadService(getYouTube()));
+            Context.getUploadService().setYouTubeService(Context.getYouTubeService());
+        }
         if(!Context.getUploadService().isRunning){
             Context.getUploadService().setYouTubeService(service);
             Context.getUploadService().start();

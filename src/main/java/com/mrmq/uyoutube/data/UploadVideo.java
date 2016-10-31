@@ -58,7 +58,7 @@ public class UploadVideo {
         Result result = new Result();
 
         try {
-            logger.info("Uploading: " + videoUri);
+            logger.info("Uploading, videoUri: {}, title: {}, desc: {}, tags: {} ", videoUri, title, desc, tags);
 
             // Add extra information to the video before uploading.
             Video videoObjectDefiningMetadata = new Video();

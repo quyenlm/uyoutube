@@ -143,7 +143,7 @@ public class UploadVideo {
             logger.info("  - Tags: " + returnedVideo.getSnippet().getTags());
             logger.info("  - Privacy Status: " + returnedVideo.getStatus().getPrivacyStatus());
             logger.info("  - Video Count: " + returnedVideo.getStatistics().getViewCount());
-            result.setValue(result);
+            result.setValue(returnedVideo);
             result.setErrorCode(ErrorCode.SUCCESS);
         } catch (GoogleJsonResponseException e) {
             result.setErrorCode(ErrorCode.FAIL);

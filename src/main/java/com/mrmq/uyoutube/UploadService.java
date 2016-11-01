@@ -32,8 +32,8 @@ public class UploadService extends Service {
 
                     if(result.getErrorCode().equals(ErrorCode.SUCCESS)) {
                         //Save upload trace to ini file
-                        if(result.getValue() != null && getYouTubeService() != null)
-                            getYouTubeService().addVideoTrace(video.getId(), result.getValue());
+                        if(result.getValue() != null && Context.getYouTubeService() != null)
+                            Context.getYouTubeService().addVideoTrace(video.getId(), result.getValue());
                     }
 
                     completedTask.incrementAndGet();

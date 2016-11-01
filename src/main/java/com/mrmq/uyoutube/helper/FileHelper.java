@@ -87,7 +87,7 @@ public class FileHelper {
         strB.append(CSV_SPLIT);
         strB.append(video.getSnippet().getTitle());
         strB.append(CSV_SPLIT);
-        strB.append(video.getSnippet().getDescription());
+//        strB.append(video.getSnippet().getDescription());
         strB.append(CSV_SPLIT);
         strB.append(toTags(video.getSnippet().getTags()));
         return strB.toString();

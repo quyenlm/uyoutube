@@ -126,14 +126,17 @@ public class UYouTubeUploadController {
                 protected Object call() throws Exception {
                     Context.getUploadService().addListener(new Service.Listener<HandleEvent>() {
                         @Override
-                        public void onEvent(HandleEvent event) {
+                        public void onEvent(final HandleEvent event) {
                             updateProgress(event.getCompletedTask(), event.getTotalTask());
-//                            if(event.getCompletedTask() > 0 && event.getCompletedTask() == event.getTotalTask()) {
-//                                synchronized (uploadTask) {
-//                                    uploadTask.notify();
-//                                    uploadTask = null;
-//                                }
-//                            }
+
+                            Platform.runLater(new Runnable(){
+                                @Override
+                                public void run() {
+                                    if(event.getCookies() != null && event.getCookies() instanceof Video)
+                                        lvUploaded.getItems().add(((Video) event.getCookies()).getSnippet().getTitle());
+                                    lbUploaded.setText(String.format("Uploaded %d/%d videos", event.getCompletedTask(), event.getTotalTask()));
+                                }
+                            });
                         }
                     });
                     synchronized (this) {

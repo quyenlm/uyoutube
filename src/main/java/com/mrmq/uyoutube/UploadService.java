@@ -38,7 +38,11 @@ public class UploadService extends Service {
 
                     completedTask.incrementAndGet();
                     logger.info("end upload video: {}", video);
-                    onEvent(new HandleEvent(totalTask.get(), completedTask.get()));
+
+                    HandleEvent event = new HandleEvent(totalTask.get(), completedTask.get());
+                    event.setCookies(video);
+                    onEvent(event);
+
                     if(result.getErrorCode().equals(ErrorCode.SUCCESS))
                         Thread.sleep(22000);
                     if(totalTask.get() == completedTask.get()) {

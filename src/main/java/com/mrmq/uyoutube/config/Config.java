@@ -21,12 +21,15 @@ public class Config {
     private String homePath = ".";
     private String downloadPath = "./download/videos/";
 
-    private String oldTitleReplace;
-    private String newTitleReplace;
-    private String oldDescReplace;
-    private String newDescReplace;
-    private String descAppend;
-    private List<String> defaultTags = Lists.asList("Larva TUBA", new String[]{"Larva ","TUBA","funny larva","cartoon","lovely cartoon","funny cartoon","best cartoon","best funny"});
+//    private String oldTitleReplace;
+//    private String newTitleReplace;
+//    private String oldDescReplace;
+//    private String newDescReplace;
+//    private String descAppend;
+//    private List<String> defaultTags = Lists.asList("Larva TUBA", new String[]{"Larva ","TUBA","funny larva","cartoon","lovely cartoon","funny cartoon","best cartoon","best funny"});
+
+    private Map<String, ChannelSetting> channelSettings = new ConcurrentHashMap<String, ChannelSetting>();
+
     private static Config instance;
 
     static {
@@ -108,51 +111,10 @@ public class Config {
         return youtubeWatchUrl;
     }
 
-    public String getOldTitleReplace() {
-        return oldTitleReplace;
+    public ChannelSetting getChannelSettings(String channelId) {
+        return channelSettings.get(channelId);
     }
-
-    public void setOldTitleReplace(String oldTitleReplace) {
-        this.oldTitleReplace = oldTitleReplace;
-    }
-
-    public String getNewTitleReplace() {
-        return newTitleReplace;
-    }
-
-    public void setNewTitleReplace(String newTitleReplace) {
-        this.newTitleReplace = newTitleReplace;
-    }
-
-    public String getOldDescReplace() {
-        return oldDescReplace;
-    }
-
-    public void setOldDescReplace(String oldDescReplace) {
-        this.oldDescReplace = oldDescReplace;
-    }
-
-    public String getNewDescReplace() {
-        return newDescReplace;
-    }
-
-    public void setNewDescReplace(String newDescReplace) {
-        this.newDescReplace = newDescReplace;
-    }
-
-    public String getDescAppend() {
-        return descAppend;
-    }
-
-    public void setDescAppend(String descAppend) {
-        this.descAppend = descAppend;
-    }
-
-    public List<String> getDefaultTags() {
-        return defaultTags;
-    }
-
-    public void setDefaultTags(List<String> defaultTags) {
-        this.defaultTags = defaultTags;
+    public ChannelSetting setChannelSettings(ChannelSetting setting) {
+        return channelSettings.put(setting.getChannelId(), setting);
     }
 }

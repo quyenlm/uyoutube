@@ -49,7 +49,7 @@
     <Label text="Email:"
            GridPane.columnIndex="0" GridPane.rowIndex="1" />
 
-    <TextField fx:id="txtLoginEmail" text="pokemon.sp.100@gmail.com"
+    <TextField fx:id="txtLoginEmail" text="lavar.lover.contact@gmail.com"
             GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
     <Label text="Password:"

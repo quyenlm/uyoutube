@@ -32,7 +32,7 @@ public class Converter {
             snippet.setTitle(singleVideo.getSnippet().getTitle());
             snippet.setDescription(singleVideo.getSnippet().getDescription());
             snippet.setChannelId(singleVideo.getSnippet().getChannelId());
-
+            snippet.setPublishedAt(singleVideo.getSnippet().getPublishedAt());
             video.setSnippet(snippet);
         }
 

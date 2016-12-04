@@ -2,13 +2,11 @@ package com.mrmq.uyoutube.windows;
 
 import com.google.api.services.youtube.model.Video;
 import com.google.common.base.Function;
-import com.mrmq.uyoutube.AppStartup;
 import com.mrmq.uyoutube.Context;
 import com.mrmq.uyoutube.beans.VideoDirectory;
 import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.data.VideoSearch;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,13 +16,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class UYouTubeDownloadController {
-    private static final Logger logger = LoggerFactory.getLogger(AppStartup.class);
+    private static final Logger logger = LoggerFactory.getLogger(UYouTubeDownloadController.class);
 
     @FXML private Text txtMessage;
     @FXML private TextField txtChannelId;
@@ -106,6 +106,7 @@ public class UYouTubeDownloadController {
                 //load downloaded video in directory
                 VideoDirectory channelDir = new VideoDirectory(Config.getInstance().getDownloadPath() + channelId);
                 final Map<String, Video> downloadedVideos = channelDir.loadInfo();
+
                 if(downloadedVideos.size() > 0)
                     Platform.runLater(new Runnable(){
                         @Override
@@ -124,6 +125,17 @@ public class UYouTubeDownloadController {
                     public Void apply(@Nullable Integer integer) {
                         updateProgress(integer, 100);
                         return null;
+                    }
+                });
+
+                Collections.sort(search, new Comparator<Video>() {
+                    @Override
+                    public int compare(Video o1, Video o2) {
+                        if(o1.getSnippet().getPublishedAt().getValue() > o2.getSnippet().getPublishedAt().getValue())
+                            return 1;
+                        if(o1.getSnippet().getPublishedAt().getValue() < o2.getSnippet().getPublishedAt().getValue())
+                            return -1;
+                        return 0;
                     }
                 });
 

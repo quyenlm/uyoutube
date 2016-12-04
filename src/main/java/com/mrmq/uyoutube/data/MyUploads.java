@@ -37,7 +37,7 @@ public class MyUploads {
     private static final Logger logger = LoggerFactory.getLogger(MyUploads.class);
 
     public static List<Channel> getMyChannels(YouTube youtube) throws IOException {
-        YouTube.Channels.List channelRequest = youtube.channels().list("contentDetails");
+        YouTube.Channels.List channelRequest = youtube.channels().list("id,snippet");
         channelRequest.setMine(true);
         channelRequest.setFields("items/contentDetails,nextPageToken,pageInfo");
         ChannelListResponse channelResult = channelRequest.execute();

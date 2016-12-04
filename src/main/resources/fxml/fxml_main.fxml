@@ -60,6 +60,16 @@
                     <fx:include fx:id="uploadTabPage" source="fxml_upload.fxml"/>
                 </content>
             </Tab>
+            <Tab text="Tools">
+                <content>
+                    <fx:include fx:id="toolTabPage" source="fxml_tool.fxml"/>
+                </content>
+            </Tab>
+            <Tab text="Setting">
+                <content>
+                    <fx:include fx:id="settingTabPage" source="fxml_settings.fxml"/>
+                </content>
+            </Tab>
         </tabs>
     </TabPane>
 

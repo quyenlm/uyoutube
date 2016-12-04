@@ -1,10 +1,12 @@
 package com.mrmq.uyoutube.beans;
 
+import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.mrmq.uyoutube.config.ChannelSetting;
 import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.helper.FileHelper;
 import org.slf4j.Logger;
@@ -21,6 +23,7 @@ public class VideoDirectory extends File {
     public static final String VIDEOS_DIR_INI = "videos.ini";
 
     private String dirPath;
+
     private Map<String, Video> videos = com.google.common.collect.Maps.newConcurrentMap();
 
     public VideoDirectory(String dirPath){
@@ -59,7 +62,7 @@ public class VideoDirectory extends File {
                 init(configFile);
 
             //read data from csv
-            //line 1: #video_id, channel_id, video_title, video_desc, video_tags
+            //line 1: #video_id, channel_id, video_title, video_desc,published_at,video_tags
 
             String line;
             String[] arrTmp;
@@ -78,9 +81,10 @@ public class VideoDirectory extends File {
                     snippet.setChannelId(arrTmp[1]);
                     snippet.setTitle(arrTmp[2]);
                     snippet.setDescription(arrTmp[3]);
+                    snippet.setPublishedAt(new DateTime(arrTmp[4]));
 
-                    if(!Strings.isNullOrEmpty(arrTmp[4])) {
-                        String[] arrTags = arrTmp[4].split(FileHelper.TAG_SPLIT);
+                    if(!Strings.isNullOrEmpty(arrTmp[5])) {
+                        String[] arrTags = arrTmp[5].split(FileHelper.TAG_SPLIT);
                         snippet.setTags(Lists.newArrayList(arrTags));
                     }
                     video.setSnippet(snippet);
@@ -89,6 +93,7 @@ public class VideoDirectory extends File {
                 }
             }
 
+            logger.info("Config videos: " + videos.size());
             filterRemovedVideos();
             logger.info("Total videos: " + videos.size());
             logger.info("Directory videos: " + videos);
@@ -109,14 +114,16 @@ public class VideoDirectory extends File {
         if(listFile == null || listFile.length == 0)
             return;
 
-        for(File file : listFiles())
+        for(File file : listFile) {
             currentFiles.put(FileHelper.getFilePrefix(file.getName()), file);
+        }
 
         Iterator<String> itKey = videos.keySet().iterator();
         while (itKey.hasNext()) {
             String fileName = itKey.next();
-            if (!currentFiles.containsKey(fileName))
+            if (!currentFiles.containsKey(fileName)) {
                 itKey.remove();
+            }
         }
     }
 
@@ -130,14 +137,33 @@ public class VideoDirectory extends File {
             writer = new BufferedWriter(new FileWriter(configFile));
 
             //write data to csv
-            //line 1, 2: video_id, channel_id, video_title, video_desc, video_tags
-            writer.write("#video_id<>channel_id<>video_title<>video_desc<>video_tags"); writer.newLine();
+            //line 1, 2: video_id, channel_id, video_title, video_desc, published_at, video_tags
+            writer.write("#video_id<>channel_id<>video_title<>video_desc<>published_at<>video_tags"); writer.newLine();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
             if(writer != null)
                 writer.close();
         }
+    }
+
+    public Map<String, Video> loadNotMergedVideos() throws IOException {
+        logger.info("loadNotMergedVideos dirPath: {}", dirPath);
+
+        Map<String, Video> mergedVideos = loadInfo();
+
+        Map<String, File> currentFiles = new ConcurrentHashMap<String, File>();
+        File[] listFile = listFiles();
+        if(listFile == null || listFile.length == 0)
+            return null;
+
+        for(File file : listFile) {
+            if(file.getName().contains(FileHelper.VIDEO_SUFFIX))
+                mergedVideos.remove(FileHelper.getFilePrefix(file.getName()));
+        }
+
+
+        return mergedVideos;
     }
 
     public synchronized boolean addVideo(Video video) throws IOException {

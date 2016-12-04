@@ -25,9 +25,15 @@
         <ColumnConstraints percentWidth="25.0" />
     </columnConstraints>
     
-    <Text id="welcome-text" text="Settings" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+    <Text id="welcome-text" text="" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
 
-    <Label id="lbChannelId" text="Title replace" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+    <Label id="lbChannelId" text="Channel Id:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+    <TextField fx:id="txtChannelId" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <HBox alignment="bottom_left" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <Button fx:id="btnRefresh" onAction="#handleButtonAction" text="Refresh" />
+    </HBox>
+
+    <Label id="lbTitle" text="Title replace" GridPane.columnIndex="0" GridPane.rowIndex="2" />
     <TextField fx:id="txtTitleOld" text="[Official]" GridPane.columnIndex="1" GridPane.rowIndex="2" />
     <TextField fx:id="txtTitleNews" text="[Larvar Tuba]" GridPane.columnIndex="2" GridPane.rowIndex="2" />
 
@@ -38,6 +44,8 @@
     <Label id="lbDescAppend" text="Description append" GridPane.columnIndex="0" GridPane.rowIndex="4" />
     <TextArea fx:id="txtDescAppend" text="" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="4" />
 
+    <Text fx:id="txtMessage"
+          GridPane.columnIndex="1" GridPane.rowIndex="5" />
     <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="3" GridPane.rowIndex="5">
         <Button fx:id="btnSave" onAction="#handleButtonAction" text="Save" />
     </HBox>

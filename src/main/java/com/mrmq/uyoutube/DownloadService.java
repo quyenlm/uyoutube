@@ -1,15 +1,5 @@
 package com.mrmq.uyoutube;
 
-import java.io.File;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.github.axet.vget.VGet;
 import com.github.axet.vget.info.VGetParser;
 import com.github.axet.vget.info.VideoFileInfo;
@@ -27,8 +17,14 @@ import com.google.api.services.youtube.model.Video;
 import com.mrmq.uyoutube.beans.VideoDirectory;
 import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.helper.FileHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DownloadService extends Service {
     private Channel channel;
@@ -38,17 +34,10 @@ public class DownloadService extends Service {
     }
 
     @Override
-    public void run() {
-        isRunning = true;
-        while (isRunning) {
-            try {
-                Video video = queues.poll(1000, TimeUnit.MILLISECONDS);
-                if(video != null)
-                    downloadVideo(video);
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
+    public void process() throws Exception {
+        Video video = queues.poll(1000, TimeUnit.MILLISECONDS);
+        if(video != null)
+            downloadVideo(video);
     }
 
     static class VGetStatus implements Runnable {

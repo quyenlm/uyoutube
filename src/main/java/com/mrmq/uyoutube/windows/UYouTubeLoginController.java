@@ -1,8 +1,6 @@
 package com.mrmq.uyoutube.windows;
 
-import com.mrmq.uyoutube.AppStartup;
 import com.mrmq.uyoutube.Context;
-import com.mrmq.uyoutube.DownloadService;
 import com.mrmq.uyoutube.YouTubeService;
 import com.mrmq.uyoutube.beans.ScreenSetting;
 import com.mrmq.uyoutube.config.Config;
@@ -24,7 +22,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class UYouTubeLoginController {
-    private static final Logger logger = LoggerFactory.getLogger(AppStartup.class);
+    private static final Logger logger = LoggerFactory.getLogger(UYouTubeLoginController.class);
 
     @FXML private Text txtMessage;
     @FXML private TextField txtLoginEmail;

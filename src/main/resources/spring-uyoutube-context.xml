@@ -10,12 +10,6 @@
     </bean>
 
     <bean id="config" class="com.mrmq.uyoutube.config.Config">
-        <property name="oldTitleReplace" value="${youtube.oldTitleReplace}" />
-        <property name="newTitleReplace" value="${youtube.newTitleReplace}" />
-        <property name="oldDescReplace" value="${youtube.oldDescReplace}" />
-        <property name="newDescReplace" value="${youtube.newDescReplace}" />
-        <property name="descAppend" value="${youtube.descAppend}" />
-
         <property name="homePath" value="${youtube.home_path}" />
         <property name="downloadPath" value="${youtube.download_path}" />
 
@@ -23,6 +17,15 @@
         <property name="appName" value="${youtube.appName}" />
 
         <property name="instance" ref="config" />
+    </bean>
+
+    <bean id="myChannelSetting" class="com.mrmq.uyoutube.config.ChannelSetting">
+        <property name="channelId" value="${youtube.oldTitleReplace}" />
+        <property name="oldTitleReplace" value="${youtube.oldTitleReplace}" />
+        <property name="newTitleReplace" value="${youtube.newTitleReplace}" />
+        <property name="oldDescReplace" value="${youtube.oldDescReplace}" />
+        <property name="newDescReplace" value="${youtube.newDescReplace}" />
+        <property name="descAppend" value="${youtube.descAppend}" />
     </bean>
 
 </beans>

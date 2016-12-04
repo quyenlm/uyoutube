@@ -2,6 +2,7 @@ package com.mrmq.uyoutube.helper;
 
 import com.google.api.client.repackaged.com.google.common.base.Preconditions;
 import com.google.api.services.youtube.model.Video;
+import com.mrmq.uyoutube.config.ChannelSetting;
 import com.mrmq.uyoutube.config.Config;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +56,7 @@ public class FileHelper {
     public static String getFilePrefix(String fileName){
         for(String postfix : Config.getInstance().getVideoType()) {
             if(fileName.contains(VIDEO_SUFFIX))
-                return fileName.replaceAll(VIDEO_SUFFIX, "").substring(0, fileName.lastIndexOf(VIDEO_SUFFIX));
+                fileName = fileName.replaceAll(VIDEO_SUFFIX, "");
             if (fileName.endsWith(postfix))
                 return fileName.substring(0, fileName.lastIndexOf("."));
         }
@@ -64,7 +66,7 @@ public class FileHelper {
     public static String toCsv(Video video) {
         StringBuilder strB = new StringBuilder();
 
-        //#video_id, channel_id, video_title, video_desc, video_tags
+        //#video_id, channel_id, video_title, video_desc, video_publish_date, video_tags
         strB.append(video.getId());
         strB.append(CSV_SPLIT);
         strB.append(video.getSnippet().getChannelId());
@@ -72,6 +74,8 @@ public class FileHelper {
         strB.append(video.getSnippet().getTitle());
         strB.append(CSV_SPLIT);
         strB.append(video.getSnippet().getDescription());
+        strB.append(CSV_SPLIT);
+        strB.append(video.getSnippet().getPublishedAt());
         strB.append(CSV_SPLIT);
         strB.append(toTags(video.getSnippet().getTags()));
         return strB.toString();
@@ -111,20 +115,32 @@ public class FileHelper {
         return strB.toString();
     }
 
-    public static Video makeUploadVideo(Video origin) {
+    public static List<String> toTags(String tags) {
+        List<String> items = new ArrayList<String>();
+        if(tags == null)
+            return items;
+
+        String[] values = tags.split(TAG_SPLIT);
+        for(String value : values)
+            items.add(value);
+
+        return items;
+    }
+
+    public static Video makeUploadVideo(Video origin, ChannelSetting setting) {
         Video video = new Video();
         BeanUtils.copyProperties(origin, video);
 
-        Preconditions.checkNotNull(Config.getInstance().getOldTitleReplace(), "OldTitleReplace can not be null");
-        Preconditions.checkNotNull(Config.getInstance().getNewTitleReplace(), "NewTitleReplace can not be null");
-        Preconditions.checkNotNull(Config.getInstance().getOldDescReplace(), "OldDescReplace can not be null");
-        Preconditions.checkNotNull(Config.getInstance().getNewDescReplace(), "NewDescReplace can not be null");
+        Preconditions.checkNotNull(setting.getOldTitleReplace(), "OldTitleReplace can not be null");
+        Preconditions.checkNotNull(setting.getNewTitleReplace(), "NewTitleReplace can not be null");
+        Preconditions.checkNotNull(setting.getOldDescReplace(), "OldDescReplace can not be null");
+        Preconditions.checkNotNull(setting.getNewDescReplace(), "NewDescReplace can not be null");
 
         String title;
-        if(StringUtils.isNoneEmpty(Config.getInstance().getOldTitleReplace()) && origin.getSnippet().getTitle().contains(Config.getInstance().getOldTitleReplace()))
-            title = origin.getSnippet().getTitle().replace(Config.getInstance().getOldTitleReplace(), Config.getInstance().getNewTitleReplace());
-        else if(StringUtils.isNoneEmpty(Config.getInstance().getNewTitleReplace()))
-            title = Config.getInstance().getNewTitleReplace() + " " + origin.getSnippet().getTitle();
+        if(StringUtils.isNoneEmpty(setting.getOldTitleReplace()) && origin.getSnippet().getTitle().contains(setting.getOldTitleReplace()))
+            title = origin.getSnippet().getTitle().replace(setting.getOldTitleReplace(), setting.getNewTitleReplace());
+        else if(StringUtils.isNoneEmpty(setting.getNewTitleReplace()))
+            title = setting.getNewTitleReplace() + " " + origin.getSnippet().getTitle();
         else
             title = origin.getSnippet().getTitle();
         video.getSnippet().setTitle(title);
@@ -132,14 +148,14 @@ public class FileHelper {
         //Description
 
         String desc;
-        if(StringUtils.isNoneEmpty(Config.getInstance().getOldDescReplace()) && origin.getSnippet().getDescription().contains(Config.getInstance().getOldDescReplace()))
-            desc = origin.getSnippet().getTitle().replace(Config.getInstance().getOldDescReplace(), Config.getInstance().getNewDescReplace());
-        else if(StringUtils.isNoneEmpty(Config.getInstance().getNewDescReplace()))
-            desc = Config.getInstance().getNewDescReplace() + " " + origin.getSnippet().getDescription();
+        if(StringUtils.isNoneEmpty(setting.getOldDescReplace()) && origin.getSnippet().getDescription().contains(setting.getOldDescReplace()))
+            desc = origin.getSnippet().getTitle().replace(setting.getOldDescReplace(), setting.getNewDescReplace());
+        else if(StringUtils.isNoneEmpty(setting.getNewDescReplace()))
+            desc = setting.getNewDescReplace() + " " + origin.getSnippet().getDescription();
         else
             desc = origin.getSnippet().getDescription();
-        if(StringUtils.isNoneEmpty(Config.getInstance().getDescAppend()))
-            desc += Config.getInstance().getDescAppend();
+        if(StringUtils.isNoneEmpty(setting.getDescAppend()))
+            desc += setting.getDescAppend();
         video.getSnippet().setDescription(desc);
 
         return video;

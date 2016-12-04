@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class UYouTubeUploadController {
-    private static final Logger logger = LoggerFactory.getLogger(AppStartup.class);
+    private static final Logger logger = LoggerFactory.getLogger(UYouTubeUploadController.class);
 
     @FXML private Text txtMessage;
     @FXML private TextField txtChannelId;
@@ -91,12 +91,14 @@ public class UYouTubeUploadController {
 
             lbNewVideos.setText("New videos: " + newVideos.size());
             lbUploaded.setText("Uploaded videos: " + lvUploaded.getItems().size());
-            btnRefresh.setDisable(false);
+
             if(newVideos.size() > 0)
                 btnUploadVideo.setDisable(false);
             else
                 btnUploadVideo.setDisable(true);
         }
+
+        btnRefresh.setDisable(false);
     }
 
     private void handleUploadButtonAction(ActionEvent event) {
@@ -132,8 +134,10 @@ public class UYouTubeUploadController {
                             Platform.runLater(new Runnable(){
                                 @Override
                                 public void run() {
-                                    if(event.getCookies() != null && event.getCookies() instanceof Video)
+                                    if(event.getCookies() != null && event.getCookies() instanceof Video) {
                                         lvUploaded.getItems().add(((Video) event.getCookies()).getSnippet().getTitle());
+                                        lvNewVideos.getItems().remove(((Video) event.getCookies()).getSnippet().getTitle());
+                                    }
                                     lbUploaded.setText(String.format("Uploaded %d/%d videos", event.getCompletedTask(), event.getTotalTask()));
                                 }
                             });
@@ -147,9 +151,5 @@ public class UYouTubeUploadController {
             };
 
         return uploadTask;
-    }
-
-    private void disableControls(boolean disable){
-
     }
 }

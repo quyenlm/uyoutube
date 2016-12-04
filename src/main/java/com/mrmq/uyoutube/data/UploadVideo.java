@@ -24,6 +24,8 @@ import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.api.services.youtube.model.VideoStatus;
 import com.mrmq.uyoutube.beans.ErrorCode;
 import com.mrmq.uyoutube.beans.Result;
+import com.mrmq.uyoutube.config.ChannelSetting;
+import com.mrmq.uyoutube.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +42,7 @@ import java.util.List;
  */
 public class UploadVideo {
     private static final Logger logger = LoggerFactory.getLogger(UploadVideo.class);
-
+    private static Config config;
     /**
      * Define a global variable that specifies the MIME type of the video
      * being uploaded.
@@ -54,7 +56,7 @@ public class UploadVideo {
      * 2.0 to authorize the API request.
      *
      */
-    public static Result upload(YouTube youtube, String title, String desc, String videoUri, List<String> tags) {
+    public static Result upload(YouTube youtube, String title, String desc, String videoUri, List<String> tags, ChannelSetting setting) {
         Result result = new Result();
 
         try {
@@ -66,7 +68,7 @@ public class UploadVideo {
             // Set the video to be publicly visible. This is the default
             // setting. Other supporting settings are "unlisted" and "private."
             VideoStatus status = new VideoStatus();
-            status.setPrivacyStatus("public");
+            status.setPrivacyStatus(setting.getPrivacyStatus()); //public/private
             videoObjectDefiningMetadata.setStatus(status);
 
             // Most of the video's metadata is set on the VideoSnippet object.

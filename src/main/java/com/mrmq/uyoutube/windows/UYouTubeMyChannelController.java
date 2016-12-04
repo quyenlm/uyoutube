@@ -2,23 +2,17 @@ package com.mrmq.uyoutube.windows;
 
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.Video;
-import com.mrmq.uyoutube.AppStartup;
 import com.mrmq.uyoutube.Context;
-import com.mrmq.uyoutube.beans.ScreenSetting;
-import com.mrmq.uyoutube.config.Config;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +22,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class UYouTubeMyChannelController implements Initializable {
-    private static final Logger logger = LoggerFactory.getLogger(AppStartup.class);
+    private static final Logger logger = LoggerFactory.getLogger(UYouTubeMyChannelController.class);
 
     @FXML private ListView lvVideos;
     @FXML private Label lbChannelIdValue;

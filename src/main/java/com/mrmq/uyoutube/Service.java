@@ -56,7 +56,6 @@ public abstract class Service extends Thread {
     public void add(Video video) {
         queues.add(video);
         totalTask.incrementAndGet();
-        onEvent(new HandleEvent(totalTask.get(), completedTask.get()));
     }
 
     public void stopService() {

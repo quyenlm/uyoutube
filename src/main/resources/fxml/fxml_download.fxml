@@ -30,10 +30,11 @@
 
     <Text id="welcome-text" text="" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
 
-    <Label id="lbChannelId" text="Channel Id:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-    <TextField fx:id="txtChannelId" text="UCph-WGR0oCbJDpaWmNHb5zg" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="1">
+    <Label text="Channel Id:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+    <TextField fx:id="txtChannelId" text="UCph-WGR0oCbJDpaWmNHb5zg" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+    <Label text="Video Id:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+    <TextField fx:id="txtVideoId" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="0">
         <Button fx:id="btnRefresh" onAction="#handleButtonAction" text="Refresh" />
     </HBox>
 
@@ -54,11 +55,11 @@
 
     <Label fx:id="lbDownloaded" text="Downloaded videos" GridPane.columnIndex="2" GridPane.rowIndex="5" />
     <ListView fx:id="lvDownloaded" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.fillHeight="2" GridPane.rowIndex="6" />
-    <ProgressBar fx:id="progressBarReup" prefHeight="23.0" prefWidth="362.0" progress="0.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+    <ProgressBar fx:id="progressBarDownload" prefHeight="23.0" prefWidth="362.0" progress="0.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="7" />
 
     <AnchorPane GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="7">
         <children>
-            <ProgressBar fx:id="progressBarDownload" prefHeight="23.0" prefWidth="304.0" progress="0.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+            <ProgressBar fx:id="progressBarNewsVideo" prefHeight="23.0" prefWidth="304.0" progress="0.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7" />
         </children>
     </AnchorPane>
    <rowConstraints>

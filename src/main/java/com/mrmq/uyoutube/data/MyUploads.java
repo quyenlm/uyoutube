@@ -21,6 +21,7 @@ import com.mrmq.uyoutube.authenticate.Auth;
 import com.google.api.services.youtube.YouTube;
 import com.google.common.collect.Lists;
 import com.mrmq.uyoutube.helper.Converter;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,7 @@ public class MyUploads {
     private static final Logger logger = LoggerFactory.getLogger(MyUploads.class);
 
     public static List<Channel> getMyChannels(YouTube youtube) throws IOException {
-        YouTube.Channels.List channelRequest = youtube.channels().list("id,snippet");
+        YouTube.Channels.List channelRequest = youtube.channels().list("contentDetails");
         channelRequest.setMine(true);
         channelRequest.setFields("items/contentDetails,nextPageToken,pageInfo");
         ChannelListResponse channelResult = channelRequest.execute();
@@ -69,7 +70,7 @@ public class MyUploads {
         // the application more efficient. See:
         // https://developers.google.com/youtube/v3/getting-started#partial
         playlistItemRequest.setFields(
-                "items(contentDetails/videoId,snippet/title,snippet/publishedAt),nextPageToken,pageInfo");
+                "items(contentDetails/videoId,snippet/title,snippet/publishedAt),nextPageToken,pageInfo,etag");
 
         String nextToken = "";
 
@@ -77,13 +78,17 @@ public class MyUploads {
         // list. As long as the API response returns a nextPageToken,
         // there are still more items to retrieve.
         do {
-            playlistItemRequest.setPageToken(nextToken);
+            if(!StringUtils.isEmpty(nextToken))
+                playlistItemRequest.setPageToken(nextToken);
             PlaylistItemListResponse playlistItemResult = playlistItemRequest.execute();
 
-            playlistItemList.addAll(playlistItemResult.getItems());
+            for(PlaylistItem item : playlistItemResult.getItems()) {
+                logger.info(String.valueOf(item));
+                playlistItemList.add(item);
+            }
 
             nextToken = playlistItemResult.getNextPageToken();
-        } while (nextToken != null);
+        } while (!StringUtils.isEmpty(nextToken));
 
         return playlistItemList;
     }

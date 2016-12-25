@@ -14,6 +14,7 @@ import com.github.axet.wget.info.ex.DownloadInterruptedError;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.Video;
+import com.mrmq.uyoutube.beans.HandleEvent;
 import com.mrmq.uyoutube.beans.VideoDirectory;
 import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.helper.FileHelper;
@@ -180,50 +181,54 @@ public class DownloadService extends Service {
 
             URL web = new URL(url);
 
-            // [OPTIONAL] limit maximum quality, or do not call this function if you wish maximum quality available.
-            // if youtube does not have video with requested quality, program will raise en exception.
-            VGetParser user = null;
-
-            // create proper html parser depends on url
-            user = VGet.parser(web);
-
-            // download limited video quality from youtube
-            // user = new YouTubeQParser(YoutubeQuality.p480);
-
-            // download mp4 format only, fail if non exist
-            // user = new YouTubeMPGParser();
-
-            // create proper videoinfo to keep specific video information
-            VideoInfo videoinfo = user.info(web);
-            videoinfo.setId(url.replace(Config.getInstance().getYoutubeWatchUrl(), ""));
-
-            File destDir = new File(destPath);
-            VGet v = new VGet(videoinfo, destDir);
-
-            VGetStatus notify = new VGetStatus(videoinfo);
-
-            // [OPTIONAL] call v.extract() only if you d like to get video title
-            // or download url link before start download. or just skip it.
-            v.extract(user, stop, notify);
-
-            logger.info("Video title: " + videoinfo.getTitle());
-            List<VideoFileInfo> list = videoinfo.getInfo();
-            if (list != null) {
-                for (VideoFileInfo d : list) {
-                    // [OPTIONAL] setTarget file for each download source video/audio
-                    // use d.getContentType() to determine which or use
-                    // v.targetFile(dinfo, ext, conflict) to set name dynamically or
-                    // d.targetFile = new File("/Downloads/CustomName.mp3");
-                    // to set file name manually.
-                    logger.info("Download URL: " + d.getSource());
-                }
-            }
-
-            v.download(user, stop, notify);
+//            // [OPTIONAL] limit maximum quality, or do not call this function if you wish maximum quality available.
+//            // if youtube does not have video with requested quality, program will raise en exception.
+//            VGetParser user = null;
+//
+//            // create proper html parser depends on url
+//            user = VGet.parser(web);
+//
+//            // download limited video quality from youtube
+//            // user = new YouTubeQParser(YoutubeQuality.p480);
+//
+//            // download mp4 format only, fail if non exist
+//            // user = new YouTubeMPGParser();
+//
+//            // create proper videoinfo to keep specific video information
+//            VideoInfo videoinfo = user.info(web);
+//            videoinfo.setId(url.replace(Config.getInstance().getYoutubeWatchUrl(), ""));
+//
+//            File destDir = new File(destPath);
+//            VGet v = new VGet(videoinfo, destDir);
+//
+//            VGetStatus notify = new VGetStatus(videoinfo);
+//
+//            // [OPTIONAL] call v.extract() only if you d like to get video title
+//            // or download url link before start download. or just skip it.
+//            v.extract(user, stop, notify);
+//
+//            logger.info("Video title: " + videoinfo.getTitle());
+//            List<VideoFileInfo> list = videoinfo.getInfo();
+//            if (list != null) {
+//                for (VideoFileInfo d : list) {
+//                    // [OPTIONAL] setTarget file for each download source video/audio
+//                    // use d.getContentType() to determine which or use
+//                    // v.targetFile(dinfo, ext, conflict) to set name dynamically or
+//                    // d.targetFile = new File("/Downloads/CustomName.mp3");
+//                    // to set file name manually.
+//                    logger.info("Download URL: " + d.getSource());
+//                }
+//            }
+//
+//            v.download(user, stop, notify);
 
             //Save to ini file
             VideoDirectory channelDir = new VideoDirectory(Config.getInstance().getDownloadPath() + video.getSnippet().getChannelId());
             channelDir.addVideo(video);
+
+            HandleEvent event = new HandleEvent(totalTask.get(), completedTask.get());
+            event.setCookies(video);
+            onEvent(event);
         } catch (DownloadInterruptedError e) {
             throw e;
         } catch (RuntimeException e) {

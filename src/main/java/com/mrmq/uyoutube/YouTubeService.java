@@ -15,6 +15,7 @@ import com.mrmq.uyoutube.beans.Result;
 import com.mrmq.uyoutube.beans.VideoDirectory;
 import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.data.MyUploads;
+import com.mrmq.uyoutube.data.UpdateVideo;
 import com.mrmq.uyoutube.data.VideoSearch;
 import com.mrmq.uyoutube.helper.FileHelper;
 import org.slf4j.Logger;
@@ -273,7 +274,7 @@ public class YouTubeService {
         Map<String, Video> channelVideos = com.google.common.collect.Maps.newConcurrentMap();
         List<Channel> lstChannel = MyUploads.getMyChannels(getYouTube());
         if(lstChannel != null)
-            for (Channel channel : MyUploads.getMyChannels(getYouTube())) {
+            for (Channel channel : lstChannel) {
                 List<Video> lstVideo = MyUploads.getChannelVideos(getYouTube(), channel);
 
                 Iterator<Video> iter = lstVideo.iterator();
@@ -348,6 +349,10 @@ public class YouTubeService {
         }
 
         return result;
+    }
+
+    public Video updateVideo(Video video) throws IOException {
+        return UpdateVideo.updateVideo(getYouTube(), video.getId(), video.getSnippet().getTags());
     }
 
     public void download(Map<String, Video> videos) {

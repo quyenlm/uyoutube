@@ -3,6 +3,8 @@ package com.mrmq.uyoutube.windows;
 import com.google.api.services.youtube.model.Video;
 import com.google.common.base.Function;
 import com.mrmq.uyoutube.Context;
+import com.mrmq.uyoutube.Service;
+import com.mrmq.uyoutube.beans.HandleEvent;
 import com.mrmq.uyoutube.beans.VideoDirectory;
 import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.data.VideoSearch;
@@ -37,8 +39,9 @@ public class UYouTubeDownloadController {
     @FXML private Label lbDownloaded;
     @FXML private ListView lvDownloaded;
     @FXML private ProgressBar progressBarDownload;
-    @FXML private ProgressBar progressBarReup;
+    @FXML private ProgressBar progressBarNewsVideo;
     private Task searchVideosWorker;
+    private Task downloadWorker;
 
     private Map<String, Video> newVideos = new ConcurrentHashMap<String, Video>();
 
@@ -69,10 +72,10 @@ public class UYouTubeDownloadController {
         }
 
         try {
-            progressBarDownload.progressProperty().unbind();
-            progressBarDownload.setProgress(0);
+            progressBarNewsVideo.progressProperty().unbind();
+            progressBarNewsVideo.setProgress(0);
             searchVideosWorker = createSearchVideosWorker(channelId);
-            progressBarDownload.progressProperty().bind(searchVideosWorker.progressProperty());
+            progressBarNewsVideo.progressProperty().bind(searchVideosWorker.progressProperty());
 
             Thread worker = new Thread(searchVideosWorker);
             worker.start();
@@ -84,19 +87,61 @@ public class UYouTubeDownloadController {
 
     protected void handleDownloadButtonAction(ActionEvent event) {
         btnDownloadVideo.setDisable(true);
-        if(newVideos.size() > 0)
-            for (Video video: newVideos.values()) {
-                Context.getDownloadService().add(video);
-            }
-    }
-
-    protected void handleReupButtonAction(ActionEvent event) {
+        if(downloadWorker == null)
         try {
-            Map<String, Video> toDownload = newVideos;
-            Context.getYouTubeService().upload(toDownload);
+            progressBarDownload.progressProperty().unbind();
+            progressBarDownload.setProgress(0);
+            downloadWorker = createDownloadWorker();
+            progressBarDownload.progressProperty().bind(downloadWorker.progressProperty());
+
+            Thread worker = new Thread(downloadWorker);
+            worker.start();
         } catch (Exception e) {
+            txtMessage.setText(e.getMessage());
             logger.error(e.getMessage(), e);
         }
+
+        if(newVideos.size() > 0)
+            for (Video video: newVideos.values()) {
+//                if(video.getId().equals("-2y5jud7ymg"))
+                    Context.getDownloadService().add(video);
+            }
+        newVideos.clear();
+        btnDownloadVideo.setDisable(false);
+    }
+
+    private Task createDownloadWorker() {
+        Task downloadWorker = null;
+
+        downloadWorker = new Task() {
+            @Override
+            protected Object call() throws Exception {
+                Context.getDownloadService().addListener(new Service.Listener<HandleEvent>() {
+                    @Override
+                    public void onEvent(final HandleEvent event) {
+                        logger.info("onEvent: " + event);
+                        updateProgress(event.getCompletedTask(), event.getTotalTask());
+
+                        Platform.runLater(new Runnable(){
+                            @Override
+                            public void run() {
+                                if(event.getCookies() != null && event.getCookies() instanceof Video) {
+                                    lvDownloaded.getItems().add(((Video) event.getCookies()).getSnippet().getTitle());
+                                    lvNewVideos.getItems().remove(((Video) event.getCookies()).getSnippet().getTitle());
+                                }
+                                lbDownloaded.setText(String.format("Downloaded %d/%d videos", event.getCompletedTask(), event.getTotalTask()));
+                            }
+                        });
+                    }
+                });
+//                synchronized (this) {
+//                    this.wait();
+//                }
+                return true;
+            }
+        };
+
+        return downloadWorker;
     }
 
     private Task createSearchVideosWorker(final String channelId) {

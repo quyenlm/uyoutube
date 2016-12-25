@@ -37,7 +37,8 @@ public class UpdateVideo {
      * Add a keyword tag to a video that the user specifies. Use OAuth 2.0 to
      * authorize the API request.
      */
-    public static void updateVideo(YouTube youtube, String videoId, String tag) {
+    public static Video updateVideo(YouTube youtube, String videoId, List<String> tags) {
+        Video videoResponse = null;
         try {
             // Call the YouTube Data API's youtube.videos.list method to
             // retrieve the resource that represents the specified video.
@@ -50,7 +51,7 @@ public class UpdateVideo {
             List<Video> videoList = listResponse.getItems();
             if (videoList.isEmpty()) {
                 logger.error("Can't find a video with ID: " + videoId);
-                return;
+                return null;
             }
 
             // Extract the snippet from the video resource.
@@ -60,22 +61,20 @@ public class UpdateVideo {
             // Preserve any tags already associated with the video. If the
             // video does not have any tags, create a new array. Append the
             // provided tag to the list of tags associated with the video.
-            List<String> tags = snippet.getTags();
-            if (tags == null) {
-                tags = new ArrayList<String>(1);
+            if(tags != null)
                 snippet.setTags(tags);
-            }
-            tags.add(tag);
+            else if(snippet.getTags() != null)
+                snippet.getTags().clear();
 
             // Update the video resource by calling the videos.update() method.
             YouTube.Videos.Update updateVideosRequest = youtube.videos().update("snippet", video);
-            Video videoResponse = updateVideosRequest.execute();
+            videoResponse = updateVideosRequest.execute();
 
             // Print information from the updated resource.
             logger.info("\n================== Returned Video ==================\n");
             logger.info("  - Title: " + videoResponse.getSnippet().getTitle());
             logger.info("  - Tags: " + videoResponse.getSnippet().getTags());
-
+            return videoResponse;
         } catch (GoogleJsonResponseException e) {
             logger.error("GoogleJsonResponseException code: " + e.getDetails().getCode() + " : "  + e.getDetails().getMessage());
         } catch (IOException e) {
@@ -83,5 +82,7 @@ public class UpdateVideo {
         } catch (Throwable t) {
             logger.error("Throwable: " + t.getMessage(), t);
         }
+
+        return videoResponse;
     }
 }

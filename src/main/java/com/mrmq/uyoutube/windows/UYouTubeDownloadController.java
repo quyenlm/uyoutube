@@ -103,8 +103,7 @@ public class UYouTubeDownloadController {
 
         if(newVideos.size() > 0)
             for (Video video: newVideos.values()) {
-//                if(video.getId().equals("-2y5jud7ymg"))
-                    Context.getDownloadService().add(video);
+                Context.getDownloadService().add(video);
             }
         newVideos.clear();
         btnDownloadVideo.setDisable(false);

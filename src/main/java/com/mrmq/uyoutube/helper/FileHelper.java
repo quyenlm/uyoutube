@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +27,10 @@ public class FileHelper {
 
     public static String makerChannelFileName(String channelEmail) {
         return Config.getInstance().getHomePath() + "data" + File.separator +  channelEmail + ".ini";
+    }
+
+    public static String getMergeMp4WebmTemplate() {
+        return Config.getInstance().getHomePath() + "bin" + File.separator +  "template-merge-mp4-webm.bat";
     }
 
     public static String createFilePath(String dirPath, String fileName) {
@@ -127,6 +131,20 @@ public class FileHelper {
         return items;
     }
 
+    public static String readStream(InputStream is) {
+        StringBuilder sb = new StringBuilder(512);
+        try {
+            Reader r = new InputStreamReader(is, "UTF-8");
+            int c = 0;
+            while ((c = r.read()) != -1) {
+                sb.append((char) c);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return sb.toString();
+    }
+
     public static Video makeUploadVideo(Video origin, ChannelSetting setting) {
         Video video = new Video();
         BeanUtils.copyProperties(origin, video);
@@ -181,6 +199,23 @@ public class FileHelper {
         for(String mp4 : cache.keySet()) {
             if(cache2.get(mp4) != null)
                 System.out.println(String.format("ffmpeg -i %s.mp4 -i %s.webm -c:a aac -c:v libx264 -strict -2 -c:s copy %s%s.mp4", mp4, mp4, mp4, VIDEO_SUFFIX));
+        }
+    }
+
+    public static void makeMergedFile(Video video) throws IOException {
+        String path = Config.getInstance().getDownloadPath() + video.getSnippet().getChannelId() + File.separator + video.getId();
+        File mp4 = new File(path + ".mp4");
+        File webm = new File(path + ".webm");
+        File merged = new File(path + VIDEO_SUFFIX + ".webm");
+        if(mp4.exists() && webm.exists() && !merged.exists()) {
+            File mergedBat = new File(path + ".bat");
+            if(mergedBat.exists())
+                mergedBat.delete();
+
+            String template = Config.getInstance().getMergeMp4WebmTemplate().replaceAll("video_id", video.getId());
+            FileWriter writer = new FileWriter(path + ".bat");
+            writer.write(template);
+            writer.close();
         }
     }
 }

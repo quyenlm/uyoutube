@@ -4,14 +4,18 @@ package com.mrmq.uyoutube.config;
 import com.google.common.collect.Lists;
 import com.mrmq.uyoutube.beans.ScreenSetting;
 import com.mrmq.uyoutube.helper.FileHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Config {
+    private static final Logger logger = LoggerFactory.getLogger(Config.class);
     public static Map<String, ScreenSetting> screenSetting = new ConcurrentHashMap<String, ScreenSetting>();
     public static Map<String, String> messages = new ConcurrentHashMap<String, String>();
 
@@ -20,13 +24,8 @@ public class Config {
     private String apiKey = "AIzaSyB46r92ADOWDL3CIFdcMaB8auZ3_2iEmK4";
     private String homePath = ".";
     private String downloadPath = "./download/videos/";
-
-//    private String oldTitleReplace;
-//    private String newTitleReplace;
-//    private String oldDescReplace;
-//    private String newDescReplace;
-//    private String descAppend;
-//    private List<String> defaultTags = Lists.asList("Larva TUBA", new String[]{"Larva ","TUBA","funny larva","cartoon","lovely cartoon","funny cartoon","best cartoon","best funny"});
+    private String toolPath = "./bin/";
+    private String mergeMp4WebmTemplate;
 
     private Map<String, ChannelSetting> channelSettings = new ConcurrentHashMap<String, ChannelSetting>();
 
@@ -45,22 +44,18 @@ public class Config {
         return Config.instance;
     }
 
-    public void init(){
-        try {
-            File homeDir = new File(homePath);
-            if(!homeDir.exists())
-                homeDir.mkdirs();
+    public void init() throws FileNotFoundException {
+        File homeDir = new File(homePath);
+        if(!homeDir.exists())
+            homeDir.mkdirs();
 
-            File downloadDir = new File(downloadPath);
-            if(!downloadDir.exists())
-                downloadDir.mkdirs();
+        File downloadDir = new File(downloadPath);
+        if(!downloadDir.exists())
+            downloadDir.mkdirs();
 
-            File channelDir = new File(FileHelper.makerChannelDataPath());
-            if(!channelDir.exists())
-                channelDir.mkdirs();
-        } catch (Exception e) {
-
-        }
+        File channelDir = new File(FileHelper.makerChannelDataPath());
+        if(!channelDir.exists())
+            channelDir.mkdirs();
     }
 
     public static Map<String, ScreenSetting> getScreenSetting() {
@@ -116,5 +111,25 @@ public class Config {
     }
     public ChannelSetting setChannelSettings(ChannelSetting setting) {
         return channelSettings.put(setting.getChannelId(), setting);
+    }
+
+    public String getToolPath() {
+        return toolPath;
+    }
+
+    public void setToolPath(String toolPath) {
+        this.toolPath = toolPath;
+    }
+
+    public String getFFMPEGPath() {
+        return getToolPath() + "ffmpeg";
+    }
+
+    public String getMergeMp4WebmTemplate() throws FileNotFoundException {
+        if(mergeMp4WebmTemplate == null) {
+            mergeMp4WebmTemplate = FileHelper.readStream(new FileInputStream(FileHelper.getMergeMp4WebmTemplate()));
+            mergeMp4WebmTemplate = mergeMp4WebmTemplate.replaceAll("path_to_ffmpeg", getToolPath());
+        }
+        return mergeMp4WebmTemplate;
     }
 }

@@ -10,11 +10,12 @@ import javafx.stage.Stage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class UYouTube extends Application {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         String[] xmlConfigs = new String[]{"classpath:spring-uyoutube-context.xml"};
         ApplicationContext ctx = new ClassPathXmlApplicationContext(xmlConfigs);
         Config.getInstance().init();

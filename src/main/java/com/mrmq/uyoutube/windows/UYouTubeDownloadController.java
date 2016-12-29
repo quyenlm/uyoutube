@@ -133,9 +133,9 @@ public class UYouTubeDownloadController {
                         });
                     }
                 });
-//                synchronized (this) {
-//                    this.wait();
-//                }
+                synchronized (this) {
+                    this.wait();
+                }
                 return true;
             }
         };

@@ -83,7 +83,7 @@ public class MyUploads {
             PlaylistItemListResponse playlistItemResult = playlistItemRequest.execute();
 
             for(PlaylistItem item : playlistItemResult.getItems()) {
-                logger.info(String.valueOf(item));
+//                logger.info(String.valueOf(item));
                 playlistItemList.add(item);
             }
 

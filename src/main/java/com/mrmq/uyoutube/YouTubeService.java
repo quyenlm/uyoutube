@@ -304,7 +304,7 @@ public class YouTubeService {
 
         logger.info("Loaded channel: " + channel);
         logger.info("Total videos: " + channelVideos.size());
-        logger.debug("Channel videos: " + channelVideos);
+//        logger.debug("Channel videos: " + channelVideos);
         return videos;
     }
 

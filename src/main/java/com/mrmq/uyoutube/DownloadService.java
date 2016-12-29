@@ -230,9 +230,10 @@ public class DownloadService extends Service {
             FileHelper.makeMergedFile(video);
 
             //Notice downloaded video
-            HandleEvent event = new HandleEvent(totalTask.get(), completedTask.get());
+            HandleEvent event = new HandleEvent(totalTask.get(), completedTask.incrementAndGet());
             event.setCookies(video);
             onEvent(event);
+            Thread.sleep(100);
         } catch (DownloadInterruptedError e) {
             throw e;
         } catch (RuntimeException e) {

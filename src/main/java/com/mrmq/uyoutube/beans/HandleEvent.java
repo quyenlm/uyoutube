@@ -33,4 +33,13 @@ public class HandleEvent implements Event {
     public void setCookies(Object cookies) {
         this.cookies = cookies;
     }
+
+    @Override
+    public String toString() {
+        return "HandleEvent{" +
+                "totalTask=" + totalTask +
+                ", completedTask=" + completedTask +
+                ", cookies=" + cookies +
+                '}';
+    }
 }

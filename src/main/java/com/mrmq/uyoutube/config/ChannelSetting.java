@@ -18,7 +18,7 @@ public class ChannelSetting {
     private String oldDescReplace;
     private String newDescReplace;
     private String descAppend;
-    private List<String> defaultTags = new ArrayList<String>();
+    private List<String> defaultTags;
     private String privacyStatus = "private";
 
     public static ChannelSetting load(String channelId) {

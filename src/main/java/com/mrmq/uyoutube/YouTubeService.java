@@ -7,25 +7,25 @@ import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.ChannelSnippet;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.mrmq.uyoutube.authenticate.Auth;
 import com.mrmq.uyoutube.beans.ErrorCode;
 import com.mrmq.uyoutube.beans.Result;
 import com.mrmq.uyoutube.beans.VideoDirectory;
+import com.mrmq.uyoutube.config.ChannelSetting;
 import com.mrmq.uyoutube.config.Config;
 import com.mrmq.uyoutube.data.MyUploads;
 import com.mrmq.uyoutube.data.UpdateVideo;
 import com.mrmq.uyoutube.data.VideoSearch;
 import com.mrmq.uyoutube.helper.FileHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class YouTubeService {
     private static final Logger logger = LoggerFactory.getLogger(YouTubeService.class);
@@ -351,8 +351,32 @@ public class YouTubeService {
         return result;
     }
 
-    public Video updateVideo(Video video) throws IOException {
-        return UpdateVideo.updateVideo(getYouTube(), video.getId(), video.getSnippet().getTags());
+    public ChannelSetting makeChannelSetting(String oldTitleReplace, String newTitleReplace, String oldDescReplace, String newDescReplace, String descAppend, String tags) {
+        ChannelSetting setting = new ChannelSetting();
+
+        if(!StringUtils.isEmpty(oldTitleReplace))
+            setting.setOldTitleReplace(oldTitleReplace);
+        if(!StringUtils.isEmpty(oldTitleReplace) || !StringUtils.isEmpty(newTitleReplace))
+            setting.setNewTitleReplace(newTitleReplace);
+        if(!StringUtils.isEmpty(oldDescReplace))
+            setting.setOldDescReplace(oldDescReplace);
+        if(!StringUtils.isEmpty(oldDescReplace) || !StringUtils.isEmpty(newDescReplace))
+            setting.setNewDescReplace(newDescReplace);
+        if(!StringUtils.isEmpty(descAppend))
+            setting.setDescAppend(descAppend);
+
+        if(!StringUtils.isEmpty(tags)) {
+            List<String> lstTags = Lists.asList("", tags.split(","));
+            setting.setDefaultTags(lstTags);
+        }
+
+        return setting;
+    }
+
+    public Video updateVideo(Video video, ChannelSetting setting) throws IOException {
+        Preconditions.checkNotNull(setting, "setting is null, channelId: " + video.getSnippet().getChannelId());
+        Video uploadVideo = FileHelper.makeUploadVideo(video, setting);
+        return UpdateVideo.updateVideo(getYouTube(), uploadVideo);
     }
 
     public void download(Map<String, Video> videos) {

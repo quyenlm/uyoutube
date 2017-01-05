@@ -28,10 +28,7 @@ public class UploadService extends Service {
             Preconditions.checkNotNull(setting, "setting is null, channelId: " + video.getSnippet().getChannelId());
 
             Video uploadVideo = FileHelper.makeUploadVideo(video, setting);
-            Result<Video> result = UploadVideo.upload(youtube, uploadVideo.getSnippet().getTitle(),
-                    uploadVideo.getSnippet().getDescription(),
-                    FileHelper.createVideoUploadFile(Config.getInstance().getDownloadPath() + video.getSnippet().getChannelId(), video.getId()),
-                    setting.getDefaultTags(), setting);
+            Result<Video> result = UploadVideo.upload(youtube, FileHelper.createVideoUploadFile(Config.getInstance().getDownloadPath() + video.getSnippet().getChannelId(), video.getId()), uploadVideo, setting);
 
             if(result.getErrorCode().equals(ErrorCode.SUCCESS)) {
                 //Save upload trace to ini file

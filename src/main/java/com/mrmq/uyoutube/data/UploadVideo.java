@@ -22,6 +22,7 @@ import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.api.services.youtube.model.VideoStatus;
+import com.google.common.base.Preconditions;
 import com.mrmq.uyoutube.beans.ErrorCode;
 import com.mrmq.uyoutube.beans.Result;
 import com.mrmq.uyoutube.config.ChannelSetting;
@@ -56,11 +57,16 @@ public class UploadVideo {
      * 2.0 to authorize the API request.
      *
      */
-    public static Result upload(YouTube youtube, String title, String desc, String videoUri, List<String> tags, ChannelSetting setting) {
+    public static Result upload(YouTube youtube, String videoUri, Video video, ChannelSetting setting) {
         Result result = new Result();
 
         try {
-            logger.info("Uploading, videoUri: {}, title: {}, desc: {}, tags: {} ", videoUri, title, desc, tags);
+            Preconditions.checkNotNull(video, "Video can not be null");
+            Preconditions.checkNotNull(video.getSnippet(), "Snippet can not be null");
+            Preconditions.checkNotNull(video.getSnippet().getTitle(), "Video title can not be null");
+            Preconditions.checkNotNull(video.getSnippet().getDescription(), "Video description can not be null");
+
+            logger.info("Uploading, videoUri: {}, videos: ", videoUri, video);
 
             // Add extra information to the video before uploading.
             Video videoObjectDefiningMetadata = new Video();
@@ -79,11 +85,11 @@ public class UploadVideo {
             // multiple files. You should remove this code from your project
             // and use your own standard names instead.
             Calendar cal = Calendar.getInstance();
-            snippet.setTitle(title);
-            snippet.setDescription(desc);
+            snippet.setTitle(video.getSnippet().getTitle());
+            snippet.setDescription(video.getSnippet().getDescription());
 
             // Set the keyword tags that you want to associate with the video
-            if(tags != null) snippet.setTags(tags);
+            if(video.getSnippet().getTags() != null) snippet.setTags(video.getSnippet().getTags());
 
             // Add the completed snippet object to the video resource.
             videoObjectDefiningMetadata.setSnippet(snippet);

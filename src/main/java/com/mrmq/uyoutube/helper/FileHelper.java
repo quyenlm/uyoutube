@@ -149,13 +149,9 @@ public class FileHelper {
         Video video = new Video();
         BeanUtils.copyProperties(origin, video);
 
-        Preconditions.checkNotNull(setting.getOldTitleReplace(), "OldTitleReplace can not be null");
-        Preconditions.checkNotNull(setting.getNewTitleReplace(), "NewTitleReplace can not be null");
-        Preconditions.checkNotNull(setting.getOldDescReplace(), "OldDescReplace can not be null");
-        Preconditions.checkNotNull(setting.getNewDescReplace(), "NewDescReplace can not be null");
-
+        //Title
         String title;
-        if(StringUtils.isNoneEmpty(setting.getOldTitleReplace()) && origin.getSnippet().getTitle().contains(setting.getOldTitleReplace()))
+        if(StringUtils.isNoneEmpty(setting.getOldTitleReplace()) && setting.getNewTitleReplace() != null && origin.getSnippet().getTitle().contains(setting.getOldTitleReplace()))
             title = origin.getSnippet().getTitle().replace(setting.getOldTitleReplace(), setting.getNewTitleReplace());
         else if(StringUtils.isNoneEmpty(setting.getNewTitleReplace()))
             title = setting.getNewTitleReplace() + " " + origin.getSnippet().getTitle();
@@ -164,18 +160,21 @@ public class FileHelper {
         video.getSnippet().setTitle(title);
 
         //Description
-
         String desc;
-        if(StringUtils.isNoneEmpty(setting.getOldDescReplace()) && origin.getSnippet().getDescription().contains(setting.getOldDescReplace()))
+        if(StringUtils.isNoneEmpty(setting.getOldDescReplace()) && setting.getNewDescReplace() != null && origin.getSnippet().getDescription().contains(setting.getOldDescReplace()))
             desc = origin.getSnippet().getTitle().replace(setting.getOldDescReplace(), setting.getNewDescReplace());
         else if(StringUtils.isNoneEmpty(setting.getNewDescReplace()))
             desc = setting.getNewDescReplace() + " " + origin.getSnippet().getDescription();
         else
             desc = origin.getSnippet().getDescription();
+
         if(StringUtils.isNoneEmpty(setting.getDescAppend()))
             desc += setting.getDescAppend();
         video.getSnippet().setDescription(desc);
 
+        //Tags
+        if(setting.getDefaultTags() != null)
+            video.getSnippet().setTags(setting.getDefaultTags());
         return video;
     }
 

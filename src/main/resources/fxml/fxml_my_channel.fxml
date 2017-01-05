@@ -53,11 +53,6 @@
         <URL value="@Login.css" />
     </stylesheets>
 
-    <columnConstraints>
-        <ColumnConstraints percentWidth="30" />
-        <ColumnConstraints percentWidth="60" />
-        <ColumnConstraints percentWidth="10" />
-    </columnConstraints>
 
     <Text id="welcome-text" text="" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
 
@@ -68,19 +63,37 @@
     <Label id="lbChannelName" text="Channel Name:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
     <Label fx:id="lbChannelNameValue" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-    <Label id="lbChannelVideo" text="Videos:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-    <Label fx:id="lbChannelVideoValue" text="" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <Label id="lbTitle" text="Title replace" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+    <TextField fx:id="txtTitleOld" text="" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <TextField fx:id="txtTitleNews" text="" GridPane.columnIndex="2" GridPane.rowIndex="3" />
 
-    <Label text="Tags:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-    <TextArea fx:id="txtTags" text="larva,larva 2016,larva season 4,larva season 1,larvar season 3,larva season 2,larva 2016 full movie,larva new 2016,larva cartoon,lava,lavar funny full 2016,lava nhung chu sau tinh nghich,larva 2015,lavar funny full 2015,larva 2016,lavar funny full 2017" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-    <Button fx:id="btnSave" text="Save" alignment="BOTTOM_RIGHT" onAction="#handleSubmitButtonAction" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+    <Label id="lbDesc" text="Description replace" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+    <TextField fx:id="txtDescOld" text="" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+    <TextField fx:id="txtDescNews" text="" GridPane.columnIndex="2" GridPane.rowIndex="4" />
 
-    <ListView fx:id="lvVideos" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.fillHeight="2" GridPane.rowIndex="6" />
+    <Label id="lbDescAppend" text="Description append" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+    <TextArea fx:id="txtDescAppend" text="" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="5" />
 
-    <AnchorPane GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="8">
+    <Label text="Tags:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+    <TextArea fx:id="txtTags" GridPane.columnSpan="3" text="" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+    <Button fx:id="btnSave" text="Save" alignment="BOTTOM_RIGHT" onAction="#handleSubmitButtonAction" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+    <Label id="lbChannelVideo" text="Video ID - Title - Tags:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+    <Label fx:id="lbChannelVideoValue" text="" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+    <ListView fx:id="lvVideos" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.fillHeight="2" GridPane.rowIndex="9" />
+
+    <AnchorPane GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="10">
         <children>
             <ProgressBar fx:id="progressBar" prefHeight="23.0" prefWidth="248.0" progress="0.0" GridPane.columnSpan="2" />
+
         </children>
     </AnchorPane>
 
+    <Text fx:id="txtMessage" text="" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+
+    <columnConstraints>
+        <ColumnConstraints percentWidth="20" />
+        <ColumnConstraints percentWidth="40" />
+        <ColumnConstraints percentWidth="40" />
+    </columnConstraints>
 </GridPane>

@@ -19,6 +19,8 @@ import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
 import com.google.api.services.youtube.model.VideoSnippet;
+import com.google.common.base.Preconditions;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,12 +39,15 @@ public class UpdateVideo {
      * Add a keyword tag to a video that the user specifies. Use OAuth 2.0 to
      * authorize the API request.
      */
-    public static Video updateVideo(YouTube youtube, String videoId, List<String> tags) {
+    public static Video updateVideo(YouTube youtube, Video newVideo) {
         Video videoResponse = null;
         try {
+            Preconditions.checkNotNull(newVideo, "Video can not be null");
+            Preconditions.checkNotNull(newVideo.getSnippet(), "Video snippet can not be null");
+
             // Call the YouTube Data API's youtube.videos.list method to
             // retrieve the resource that represents the specified video.
-            YouTube.Videos.List listVideosRequest = youtube.videos().list("snippet").setId(videoId);
+            YouTube.Videos.List listVideosRequest = youtube.videos().list("snippet").setId(newVideo.getId());
             VideoListResponse listResponse = listVideosRequest.execute();
 
             // Since the API request specified a unique video ID, the API
@@ -50,7 +55,7 @@ public class UpdateVideo {
             // not contain a video, then the specified video ID was not found.
             List<Video> videoList = listResponse.getItems();
             if (videoList.isEmpty()) {
-                logger.error("Can't find a video with ID: " + videoId);
+                logger.error("Can't find a video with ID: " + newVideo.getId());
                 return null;
             }
 
@@ -61,10 +66,12 @@ public class UpdateVideo {
             // Preserve any tags already associated with the video. If the
             // video does not have any tags, create a new array. Append the
             // provided tag to the list of tags associated with the video.
-            if(tags != null)
-                snippet.setTags(tags);
-            else if(snippet.getTags() != null)
-                snippet.getTags().clear();
+            if(newVideo.getSnippet().getTags() != null)
+                snippet.setTags(newVideo.getSnippet().getTags());
+            if(!StringUtils.isEmpty(newVideo.getSnippet().getTitle()))
+                snippet.setTitle(newVideo.getSnippet().getTitle());
+            if(!StringUtils.isEmpty(newVideo.getSnippet().getDescription()))
+                snippet.setDescription(newVideo.getSnippet().getDescription());
 
             // Update the video resource by calling the videos.update() method.
             YouTube.Videos.Update updateVideosRequest = youtube.videos().update("snippet", video);
